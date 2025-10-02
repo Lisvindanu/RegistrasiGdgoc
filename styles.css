@@ -1,0 +1,543 @@
+/* Google Sans Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Google Sans', sans-serif;
+    background-color: #f0f0f0;
+    color: #1e1e1e;
+    overflow-x: hidden;
+}
+
+/* Particles Background */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Navbar */
+.navbar {
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-logo {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #202124;
+}
+
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 120px);
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 3rem 2.5rem;
+    max-width: 800px;
+    width: 100%;
+    margin: 2rem auto;
+}
+
+.form-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #202124;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.form-subtitle {
+    font-size: 1.125rem;
+    color: #5f6368;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.625rem;
+    color: #202124;
+    font-size: 1rem;
+}
+
+.form-label .required {
+    color: #ea4335;
+    margin-left: 0.25rem;
+}
+
+.form-label .optional {
+    color: #5f6368;
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+}
+
+/* Form Inputs */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    font-family: 'Google Sans', sans-serif;
+    background-color: white;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+}
+
+.form-input:hover:not(:focus),
+.form-select:hover:not(:focus),
+.form-textarea:hover:not(:focus) {
+    border-color: #bdc1c6;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-file {
+    width: 100%;
+    padding: 1rem;
+    border: 2px dashed #dadce0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: #f8f9fa;
+}
+
+.form-file:hover {
+    border-color: #4285f4;
+    background-color: #e8f0fe;
+}
+
+/* Department Grid */
+.department-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.department-card {
+    border: 2px solid #dadce0;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.department-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #4285f4, #34a853, #fbbc05, #ea4335);
+    transform: translateY(-4px);
+    transition: transform 0.2s ease;
+}
+
+.department-card:hover {
+    border-color: #4285f4;
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+}
+
+.department-card:hover::before {
+    transform: translateY(0);
+}
+
+.department-card.selected {
+    border-color: #4285f4;
+    background-color: #e8f0fe;
+    box-shadow: 0 4px 16px rgba(66, 133, 244, 0.25);
+}
+
+.department-card.selected::before {
+    transform: translateY(0);
+}
+
+.department-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.department-name {
+    font-weight: 500;
+    color: #202124;
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    margin-top: 2rem;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, #3367d6 0%, #2851a3 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+    transform: translateY(-2px);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    background: #bdc1c6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Error Messages */
+.error-message {
+    color: #ea4335;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+    padding-left: 0.25rem;
+}
+
+/* Success Popup */
+.success-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.success-popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.success-content {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 3rem 2.5rem;
+    max-width: 90%;
+    width: 500px;
+    text-align: center;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+.success-popup.active .success-content {
+    transform: translateY(0);
+}
+
+.success-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.success-title {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 0.75rem;
+}
+
+.success-message {
+    font-size: 1.125rem;
+    color: #5f6368;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.close-button {
+    padding: 0.875rem 2.5rem;
+    background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.close-button:hover {
+    background: linear-gradient(135deg, #3367d6 0%, #2851a3 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #5f6368;
+    margin-top: 2rem;
+    border-top: 1px solid #dadce0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .department-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+
+    .navbar-title {
+        font-size: 1rem;
+    }
+
+    .navbar-logo {
+        height: 32px;
+    }
+
+    .container {
+        padding: 1.5rem 1rem;
+    }
+
+    .form-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem 0;
+        border-radius: 12px;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+    }
+
+    .form-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .department-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .department-card {
+        padding: 1rem 0.75rem;
+    }
+
+    .department-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .department-name {
+        font-size: 0.875rem;
+    }
+
+    .submit-button {
+        font-size: 1rem;
+        padding: 0.875rem 1.5rem;
+    }
+
+    .success-content {
+        padding: 2rem 1.5rem;
+        width: 90%;
+    }
+
+    .success-icon {
+        font-size: 4rem;
+    }
+
+    .success-title {
+        font-size: 1.5rem;
+    }
+
+    .success-message {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.875rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .navbar-logo {
+        height: 28px;
+    }
+
+    .navbar-title {
+        font-size: 0.875rem;
+    }
+
+    .container {
+        padding: 1rem 0.75rem;
+    }
+
+    .form-container {
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.95rem;
+    }
+
+    .department-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .department-card {
+        padding: 1rem;
+    }
+
+    .success-content {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .success-icon {
+        font-size: 3.5rem;
+    }
+
+    .success-title {
+        font-size: 1.25rem;
+    }
+
+    .success-message {
+        font-size: 0.95rem;
+    }
+
+    .close-button {
+        padding: 0.75rem 2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus Visible for Accessibility */
+*:focus-visible {
+    outline: 2px solid #4285f4;
+    outline-offset: 2px;
+}

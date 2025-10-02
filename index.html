@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Form Pendaftaran GDGOC Universitas Pasundan - Bergabunglah dengan Google Developer Groups on Campus">
+    <title>Pendaftaran GDGOC Universitas Pasundan</title>
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+    <!-- Custom Script -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <img src="https://live.staticflickr.com/65535/54522534773_92c69b50a7_z.jpg"
+             alt="Google Developers Groups on Campus"
+             class="navbar-logo">
+        <h1 class="navbar-title">Pendaftaran GDGOC</h1>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container">
+        <div class="form-container">
+            <h1 class="form-title">Pendaftaran GDGOC</h1>
+            <p class="form-subtitle">Universitas Pasundan</p>
+
+            <form id="registration-form" novalidate>
+                <!-- Nama Lengkap -->
+                <div class="form-group">
+                    <label for="nama" class="form-label">
+                        Nama Lengkap<span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="nama"
+                           name="nama"
+                           class="form-input"
+                           autocomplete="name"
+                           required>
+                    <div class="error-message" id="nama-error">Nama harus diisi</div>
+                </div>
+
+                <!-- NPM -->
+                <div class="form-group">
+                    <label for="npm" class="form-label">
+                        NPM<span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="npm"
+                           name="npm"
+                           class="form-input"
+                           required>
+                    <div class="error-message" id="npm-error">NPM harus diisi</div>
+                </div>
+
+                <!-- Fakultas -->
+                <div class="form-group">
+                    <label for="fakultas" class="form-label">
+                        Fakultas<span class="required">*</span>
+                    </label>
+                    <select id="fakultas" name="fakultas" class="form-select" required>
+                        <option value="">Pilih Fakultas</option>
+                        <option value="Fakultas Teknik">Fakultas Teknik</option>
+                        <option value="Fakultas Ekonomi dan Bisnis">Fakultas Ekonomi dan Bisnis</option>
+                        <option value="Fakultas Hukum">Fakultas Hukum</option>
+                        <option value="Fakultas Keguruan dan Ilmu Pendidikan">Fakultas Keguruan dan Ilmu Pendidikan</option>
+                        <option value="Fakultas Ilmu Sosial dan Ilmu Politik">Fakultas Ilmu Sosial dan Ilmu Politik</option>
+                        <option value="Fakultas Kedokteran">Fakultas Kedokteran</option>
+                        <option value="Fakultas Ilmu Seni dan Sastra">Fakultas Ilmu Seni dan Sastra</option>
+                    </select>
+                    <div class="error-message" id="fakultas-error">Fakultas harus dipilih</div>
+                </div>
+
+                <!-- Program Studi -->
+                <div class="form-group">
+                    <label for="prodi" class="form-label">
+                        Program Studi<span class="required">*</span>
+                    </label>
+                    <select id="prodi" name="prodi" class="form-select" required disabled>
+                        <option value="">Pilih Fakultas terlebih dahulu</option>
+                    </select>
+                    <div class="error-message" id="prodi-error">Program Studi harus dipilih</div>
+                </div>
+
+                <!-- Pilihan Departemen -->
+                <div class="form-group">
+                    <label class="form-label">
+                        Pilih Departemen<span class="required">*</span>
+                    </label>
+                    <div class="department-grid">
+                        <div class="department-card" data-department="HUMAN RESOURCE" role="button" tabindex="0">
+                            <div class="department-icon">👥</div>
+                            <div class="department-name">Human Resource</div>
+                        </div>
+                        <div class="department-card" data-department="MEDIA CREATIVE" role="button" tabindex="0">
+                            <div class="department-icon">🎨</div>
+                            <div class="department-name">Media Creative</div>
+                        </div>
+                        <div class="department-card" data-department="EVENT" role="button" tabindex="0">
+                            <div class="department-icon">📅</div>
+                            <div class="department-name">Event</div>
+                        </div>
+                        <div class="department-card" data-department="PUBLIC RELATIONSHIP" role="button" tabindex="0">
+                            <div class="department-icon">📢</div>
+                            <div class="department-name">Public Relationship</div>
+                        </div>
+                        <div class="department-card" data-department="Curriculum Web" role="button" tabindex="0">
+                            <div class="department-icon">🌐</div>
+                            <div class="department-name">Curriculum Web</div>
+                        </div>
+                        <div class="department-card" data-department="Curriculum IoT" role="button" tabindex="0">
+                            <div class="department-icon">🔌</div>
+                            <div class="department-name">Curriculum IoT</div>
+                        </div>
+                        <div class="department-card" data-department="Curriculum ML" role="button" tabindex="0">
+                            <div class="department-icon">🤖</div>
+                            <div class="department-name">Curriculum ML</div>
+                        </div>
+                        <div class="department-card" data-department="Curriculum Game" role="button" tabindex="0">
+                            <div class="department-icon">🎮</div>
+                            <div class="department-name">Curriculum Game</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="department" name="department" required>
+                    <div class="error-message" id="department-error">Departemen harus dipilih</div>
+                </div>
+
+                <!-- CV Upload -->
+                <div class="form-group">
+                    <label for="cv" class="form-label">
+                        Upload CV (PDF)<span class="required">*</span>
+                    </label>
+                    <input type="file"
+                           id="cv"
+                           name="cv"
+                           class="form-file"
+                           accept=".pdf"
+                           required>
+                    <div class="error-message" id="cv-error">CV harus diupload (format PDF)</div>
+                </div>
+
+                <!-- Portofolio Upload (Optional) -->
+                <div class="form-group">
+                    <label for="portofolio" class="form-label">
+                        Upload Portofolio (PDF)<span class="optional">(Opsional)</span>
+                    </label>
+                    <input type="file"
+                           id="portofolio"
+                           name="portofolio"
+                           class="form-file"
+                           accept=".pdf">
+                </div>
+
+                <!-- Bukti Join Discord -->
+                <div class="form-group">
+                    <label for="discord" class="form-label">
+                        Upload Bukti Join Discord (Gambar)<span class="required">*</span>
+                    </label>
+                    <input type="file"
+                           id="discord"
+                           name="discord"
+                           class="form-file"
+                           accept="image/*"
+                           required>
+                    <div class="error-message" id="discord-error">Bukti join Discord harus diupload</div>
+                </div>
+
+                <!-- Bukti Join Bevy -->
+                <div class="form-group">
+                    <label for="bv" class="form-label">
+                        Upload Bukti Join Bevy (Gambar)<span class="required">*</span>
+                    </label>
+                    <input type="file"
+                           id="bv"
+                           name="bv"
+                           class="form-file"
+                           accept="image/*"
+                           required>
+                    <div class="error-message" id="bv-error">Bukti join Bevy harus diupload</div>
+                </div>
+
+                <!-- Nomor WhatsApp -->
+                <div class="form-group">
+                    <label for="whatsapp" class="form-label">
+                        Nomor WhatsApp<span class="required">*</span>
+                    </label>
+                    <input type="tel"
+                           id="whatsapp"
+                           name="whatsapp"
+                           class="form-input"
+                           placeholder="08123456789"
+                           pattern="[0-9]{10,13}"
+                           required>
+                    <div class="error-message" id="whatsapp-error">Nomor WhatsApp harus diisi dengan format yang benar (10-13 digit)</div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-button">
+                    Daftar Sekarang
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Popup -->
+    <div class="success-popup" id="success-popup" role="dialog" aria-modal="true" aria-labelledby="success-title">
+        <div class="success-content">
+            <div class="success-icon" aria-hidden="true">✅</div>
+            <h2 class="success-title" id="success-title">Pendaftaran Berhasil!</h2>
+            <p class="success-message">Terima kasih telah mendaftar. Kami akan menghubungi Anda segera.</p>
+            <button class="close-button" onclick="closeSuccessPopup()">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2025 Google Developer Groups on Campus - Universitas Pasundan
+    </footer>
+</body>
+</html>
