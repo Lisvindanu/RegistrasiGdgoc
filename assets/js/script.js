@@ -58,10 +58,11 @@ function initParticles() {
     });
 }
 
-// Department Selection Handler
+// Department Selection Handler - Updated for multiple selection (max 2)
 class DepartmentSelector {
     constructor() {
-        this.selectedDepartment = null;
+        this.selectedDepartments = [];
+        this.maxSelections = 2;
         this.departmentCards = document.querySelectorAll('.department-card');
         this.departmentInput = document.getElementById('department');
         this.init();
@@ -69,32 +70,46 @@ class DepartmentSelector {
 
     init() {
         this.departmentCards.forEach(card => {
-            card.addEventListener('click', () => this.selectDepartment(card));
+            card.addEventListener('click', () => this.toggleDepartment(card));
         });
     }
 
-    selectDepartment(card) {
-        // Remove selected class from all cards
-        this.departmentCards.forEach(c => c.classList.remove('selected'));
+    toggleDepartment(card) {
+        const department = card.getAttribute('data-department');
+        const isSelected = this.selectedDepartments.includes(department);
 
-        // Add selected class to clicked card
-        card.classList.add('selected');
+        if (isSelected) {
+            // Deselect
+            this.selectedDepartments = this.selectedDepartments.filter(d => d !== department);
+            card.classList.remove('selected');
+        } else {
+            // Check max selections
+            if (this.selectedDepartments.length >= this.maxSelections) {
+                alert(`Maksimal ${this.maxSelections} departemen dapat dipilih`);
+                return;
+            }
+            // Select
+            this.selectedDepartments.push(department);
+            card.classList.add('selected');
+        }
 
-        // Store selected department
-        this.selectedDepartment = card.getAttribute('data-department');
-        this.departmentInput.value = this.selectedDepartment;
+        // Update hidden input value
+        this.departmentInput.value = this.selectedDepartments.join(', ');
 
-        // Hide error message if shown
-        document.getElementById('department-error').style.display = 'none';
+        // Hide error message if at least one is selected
+        if (this.selectedDepartments.length > 0) {
+            document.getElementById('department-error').style.display = 'none';
+        }
     }
 
     getSelected() {
-        return this.selectedDepartment;
+        return this.selectedDepartments.join(', ');
     }
 
     reset() {
-        this.selectedDepartment = null;
+        this.selectedDepartments = [];
         this.departmentCards.forEach(c => c.classList.remove('selected'));
+        this.departmentInput.value = '';
     }
 }
 
@@ -142,6 +157,13 @@ class FormValidator {
             isValid = false;
         }
 
+        // Reason (Alasan)
+        const reason = document.getElementById('reason').value.trim();
+        if (!reason) {
+            this.showError('reason-error');
+            isValid = false;
+        }
+
         // CV
         const cv = document.getElementById('cv').files[0];
         if (!cv) {
@@ -149,6 +171,16 @@ class FormValidator {
             isValid = false;
         } else if (cv.type !== 'application/pdf') {
             this.showError('cv-error', 'CV harus berformat PDF');
+            isValid = false;
+        }
+
+        // Instagram
+        const instagram = document.getElementById('instagram').files[0];
+        if (!instagram) {
+            this.showError('instagram-error');
+            isValid = false;
+        } else if (!instagram.type.startsWith('image/')) {
+            this.showError('instagram-error', 'Bukti follow Instagram harus berupa gambar');
             isValid = false;
         }
 
@@ -217,7 +249,7 @@ class RegistrationForm {
         this.validator = new FormValidator(this.form);
         this.submitButton = document.querySelector('.submit-button');
         // URL Google Apps Script Web App
-        this.scriptURL = 'https://script.google.com/macros/s/AKfycbxz0BfaWlKg8BdOcuYNzeywAYTxlACWnA2IgWg89-Jlhvq0MHz8mP-6iLQefCghSqNY/exec';
+        this.scriptURL = 'https://script.google.com/macros/s/AKfycby2RbKwWav_o3k1ik-A6DR-IdglUy6LxFaX_TqY25I6f6ACnJq88bMqRteBmy50Jsp2/exec';
         this.init();
     }
 
@@ -324,6 +356,7 @@ class RegistrationForm {
         // Convert files to base64 for Google Apps Script
         const cvFile = document.getElementById('cv').files[0];
         const portofolioFile = document.getElementById('portofolio').files[0];
+        const instagramFile = document.getElementById('instagram').files[0];
         const discordFile = document.getElementById('discord').files[0];
         const bvFile = document.getElementById('bv').files[0];
 
@@ -333,9 +366,11 @@ class RegistrationForm {
             fakultas: document.getElementById('fakultas').value,
             prodi: document.getElementById('prodi').value.trim(),
             department: departmentSelector.getSelected(),
+            reason: document.getElementById('reason').value.trim(),
             whatsapp: document.getElementById('whatsapp').value.trim(),
             cv: await this.fileToBase64(cvFile),
             portofolio: portofolioFile ? await this.fileToBase64(portofolioFile) : null,
+            instagram: await this.fileToBase64(instagramFile),
             discord: await this.fileToBase64(discordFile),
             bv: await this.fileToBase64(bvFile)
         };

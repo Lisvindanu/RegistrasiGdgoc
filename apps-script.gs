@@ -44,16 +44,18 @@ function doPost(e) {
         'Fakultas',
         'Program Studi',
         'Departemen',
+        'Alasan',
         'Nomor WhatsApp',
         'CV Link',
         'Portofolio Link',
+        'Bukti Instagram Link',
         'Bukti Discord Link',
         'Bukti Bevy Link',
         'Status'
       ]);
 
       // Format header
-      const headerRange = sheet.getRange(1, 1, 1, 12);
+      const headerRange = sheet.getRange(1, 1, 1, 14);
       headerRange.setBackground('#4285f4');
       headerRange.setFontColor('#ffffff');
       headerRange.setFontWeight('bold');
@@ -66,6 +68,9 @@ function doPost(e) {
 
     const portofolioLink = data.portofolio ? uploadFileToDrive(data.portofolio, data.nama, 'Portofolio') : '';
     Logger.log('Portofolio uploaded: ' + portofolioLink);
+
+    const instagramLink = data.instagram ? uploadFileToDrive(data.instagram, data.nama, 'Instagram') : '';
+    Logger.log('Instagram uploaded: ' + instagramLink);
 
     const discordLink = data.discord ? uploadFileToDrive(data.discord, data.nama, 'Discord') : '';
     Logger.log('Discord uploaded: ' + discordLink);
@@ -82,9 +87,11 @@ function doPost(e) {
       data.fakultas,
       data.prodi,
       data.department,
+      data.reason,
       data.whatsapp,
       cvLink,
       portofolioLink,
+      instagramLink,
       discordLink,
       bevyLink,
       'Pending'
@@ -95,7 +102,7 @@ function doPost(e) {
     Logger.log('Row added successfully');
 
     // Auto-resize columns
-    sheet.autoResizeColumns(1, 12);
+    sheet.autoResizeColumns(1, 14);
     Logger.log('Columns resized');
 
     // Send email notification (optional)
@@ -198,6 +205,7 @@ function sendEmailNotification(data) {
       Fakultas: ${data.fakultas}
       Program Studi: ${data.prodi}
       Departemen: ${data.department}
+      Alasan: ${data.reason}
       WhatsApp: ${data.whatsapp}
 
       Silakan cek Google Sheets untuk detail lengkap.
@@ -224,12 +232,18 @@ function testFormSubmission() {
         npm: '223040001',
         fakultas: 'Teknik',
         prodi: 'Informatika',
-        department: 'CURRICULUM WEB',
+        department: 'CURRICULUM WEB, CURRICULUM ML',
+        reason: 'Saya tertarik dengan web development dan machine learning',
         whatsapp: '081234567890',
         cv: {
           name: 'test-cv.pdf',
           mimeType: 'application/pdf',
           data: 'JVBERi0xLjQKJeLjz9MKMyAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDIgMCBSL01lZGlhQm94WzAgMCA2MTIgNzkyXS9Db250ZW50cyA0IDAgUj4+CmVuZG9iago0IDAgb2JqCjw8L0xlbmd0aCA0NT4+CnN0cmVhbQpCVAovRjEgMTIgVGYKMTAwIDcwMCBUZAooVGVzdCBQREYpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKMSAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1szIDAgUl0+PgplbmRvYmoKNSAwIG9iago8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMS9CYXNlRm9udC9IZWx2ZXRpY2EvTmFtZS9GMT4+CmVuZG9iagoyIDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAxIDAgUi9SZXNvdXJjZXM8PC9Gb250PDwvRjEgNSAwIFI+Pj4+Pj4KZW5kb2JqCnRyYWlsZXIKPDwvUm9vdCAyIDAgUi9TaXplIDY+PgpzdGFydHhyZWYKMzI3CiUlRU9G'
+        },
+        instagram: {
+          name: 'test-instagram.jpg',
+          mimeType: 'image/jpeg',
+          data: '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAB//2Q=='
         },
         discord: {
           name: 'test-discord.jpg',
@@ -308,6 +322,57 @@ function clearDataByNPM(npm) {
 
     Logger.log('Berhasil menghapus ' + deletedCount + ' baris dengan NPM: ' + npm);
     return 'Berhasil menghapus ' + deletedCount + ' baris dengan NPM: ' + npm;
+
+  } catch (error) {
+    Logger.log('Error: ' + error.toString());
+    return 'Error: ' + error.toString();
+  }
+}
+
+// Fungsi untuk hapus semua dan buat ulang sheet dengan header yang benar
+function resetSheetWithCorrectHeader() {
+  try {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    let sheet = spreadsheet.getSheetByName(SHEET_NAME);
+
+    if (!sheet) {
+      Logger.log('Sheet tidak ditemukan, membuat baru...');
+      sheet = spreadsheet.insertSheet(SHEET_NAME);
+    } else {
+      // Clear semua isi sheet
+      sheet.clear();
+      Logger.log('Sheet cleared');
+    }
+
+    // Tambahkan header yang benar
+    sheet.appendRow([
+      'Timestamp',
+      'Nama Lengkap',
+      'NPM',
+      'Fakultas',
+      'Program Studi',
+      'Departemen',
+      'Alasan',
+      'Nomor WhatsApp',
+      'CV Link',
+      'Portofolio Link',
+      'Bukti Instagram Link',
+      'Bukti Discord Link',
+      'Bukti Bevy Link',
+      'Status'
+    ]);
+
+    // Format header
+    const headerRange = sheet.getRange(1, 1, 1, 14);
+    headerRange.setBackground('#4285f4');
+    headerRange.setFontColor('#ffffff');
+    headerRange.setFontWeight('bold');
+
+    // Auto resize columns
+    sheet.autoResizeColumns(1, 14);
+
+    Logger.log('Sheet berhasil direset dengan header yang benar!');
+    return 'Success! Sheet berhasil direset dengan header yang benar.';
 
   } catch (error) {
     Logger.log('Error: ' + error.toString());
