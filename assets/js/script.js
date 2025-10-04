@@ -14,754 +14,862 @@ const videoConfig = [
     }
 ];
 
-// Initialize Particles.js with Google-themed colors
+// Initialize Particles.js with Google colors
 function initParticles() {
-    particlesJS('particles-js', {
-        particles: {
-            number: {
-                value: 50,
-                density: {
-                    enable: true,
-                    value_area: 800
-                }
-            },
-            color: {
-                value: ['#4285f4', '#34a853', '#fbbc05', '#ea4335']
-            },
-            shape: {
-                type: 'circle',
-                stroke: {
-                    width: 0,
-                    color: '#000000'
-                }
-            },
-            opacity: {
-                value: 0.3,
-                random: true
-            },
-            size: {
-                value: 4,
-                random: true
-            },
-            line_linked: {
-                enable: false
-            },
-            move: {
-                enable: true,
-                speed: 1.5,
-                direction: 'none',
-                random: false,
-                straight: false,
-                out_mode: 'out',
-                bounce: false
-            }
-        },
-        interactivity: {
-            detect_on: 'canvas',
-            events: {
-                onhover: {
-                    enable: true,
-                    mode: 'repulse'
-                },
-                onclick: {
-                    enable: true,
-                    mode: 'push'
-                },
-                resize: true
-            }
-        },
-        retina_detect: true
-    });
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 60, density: { enable: true, value_area: 800 } },
+      color: { value: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"] },
+      shape: { type: "circle" },
+      opacity: { value: 0.4, random: true },
+      size: { value: 4, random: true },
+      line_linked: { enable: false },
+      move: {
+        enable: true,
+        speed: 2,
+        direction: "none",
+        random: false,
+        straight: false,
+        out_mode: "out",
+      },
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" },
+        resize: true,
+      },
+    },
+    retina_detect: true,
+  });
 }
 
-// Department Selection Handler - Updated for multiple selection (max 2)
-class DepartmentSelector {
-    constructor() {
-        this.selectedDepartments = [];
-        this.maxSelections = 2;
-        this.departmentCards = document.querySelectorAll('.department-card');
-        this.departmentInput = document.getElementById('department');
-        this.init();
-    }
-
-    init() {
-        this.departmentCards.forEach(card => {
-            card.addEventListener('click', () => this.toggleDepartment(card));
-        });
-    }
-
-    toggleDepartment(card) {
-        const department = card.getAttribute('data-department');
-        const isSelected = this.selectedDepartments.includes(department);
-
-        if (isSelected) {
-            // Deselect
-            this.selectedDepartments = this.selectedDepartments.filter(d => d !== department);
-            card.classList.remove('selected');
-        } else {
-            // Check max selections
-            if (this.selectedDepartments.length >= this.maxSelections) {
-                alert(`Maksimal ${this.maxSelections} departemen dapat dipilih`);
-                return;
-            }
-            // Select
-            this.selectedDepartments.push(department);
-            card.classList.add('selected');
-        }
-
-        // Update hidden input value
-        this.departmentInput.value = this.selectedDepartments.join(', ');
-
-        // Hide error message if at least one is selected
-        if (this.selectedDepartments.length > 0) {
-            document.getElementById('department-error').style.display = 'none';
-        }
-    }
-
-    getSelected() {
-        return this.selectedDepartments.join(', ');
-    }
-
-    reset() {
-        this.selectedDepartments = [];
-        this.departmentCards.forEach(c => c.classList.remove('selected'));
-        this.departmentInput.value = '';
-    }
-}
-
-// Form Validator
-class FormValidator {
-    constructor(form) {
-        this.form = form;
-    }
-
-    validate() {
-        this.resetErrors();
-        let isValid = true;
-
-        // Nama
-        const nama = document.getElementById('nama').value.trim();
-        if (!nama) {
-            this.showError('nama-error');
-            isValid = false;
-        }
-
-        // NPM
-        const npm = document.getElementById('npm').value.trim();
-        if (!npm) {
-            this.showError('npm-error');
-            isValid = false;
-        }
-
-        // Email
-        const email = document.getElementById('email').value.trim();
-        if (!email) {
-            this.showError('email-error');
-            isValid = false;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            this.showError('email-error', 'Format email tidak valid');
-            isValid = false;
-        }
-
-        // Fakultas
-        const fakultas = document.getElementById('fakultas').value;
-        if (!fakultas) {
-            this.showError('fakultas-error');
-            isValid = false;
-        }
-
-        // Prodi
-        const prodi = document.getElementById('prodi').value.trim();
-        if (!prodi) {
-            this.showError('prodi-error');
-            isValid = false;
-        }
-
-        // Department
-        if (!departmentSelector.getSelected()) {
-            this.showError('department-error');
-            isValid = false;
-        }
-
-        // Reason (Alasan)
-        const reason = document.getElementById('reason').value.trim();
-        if (!reason) {
-            this.showError('reason-error');
-            isValid = false;
-        }
-
-        // CV
-        const cv = document.getElementById('cv').files[0];
-        const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
-        if (!cv) {
-            this.showError('cv-error');
-            isValid = false;
-        } else if (cv.type !== 'application/pdf') {
-            this.showError('cv-error', 'CV harus berformat PDF');
-            isValid = false;
-        } else if (cv.size > maxFileSize) {
-            this.showError('cv-error', 'Ukuran CV maksimal 2MB');
-            isValid = false;
-        }
-
-        // Portofolio (optional, but check size if uploaded)
-        const portofolio = document.getElementById('portofolio').files[0];
-        if (portofolio && portofolio.size > maxFileSize) {
-            this.showError('portofolio-error', 'Ukuran portofolio maksimal 2MB');
-            isValid = false;
-        }
-
-        // Instagram
-        const instagram = document.getElementById('instagram').files[0];
-        if (!instagram) {
-            this.showError('instagram-error');
-            isValid = false;
-        } else if (!instagram.type.startsWith('image/')) {
-            this.showError('instagram-error', 'Bukti follow Instagram harus berupa gambar');
-            isValid = false;
-        }
-
-        // Discord
-        const discord = document.getElementById('discord').files[0];
-        if (!discord) {
-            this.showError('discord-error');
-            isValid = false;
-        } else if (!discord.type.startsWith('image/')) {
-            this.showError('discord-error', 'Bukti Discord harus berupa gambar');
-            isValid = false;
-        }
-
-        // BV (Bevy)
-        const bv = document.getElementById('bv').files[0];
-        if (!bv) {
-            this.showError('bv-error');
-            isValid = false;
-        } else if (!bv.type.startsWith('image/')) {
-            this.showError('bv-error', 'Bukti join Bevy harus berupa gambar');
-            isValid = false;
-        }
-
-        // WhatsApp
-        const whatsapp = document.getElementById('whatsapp').value.trim();
-        if (!whatsapp) {
-            this.showError('whatsapp-error');
-            isValid = false;
-        } else if (!/^[0-9]{10,13}$/.test(whatsapp)) {
-            this.showError('whatsapp-error', 'Nomor WhatsApp harus 10-13 digit angka');
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-    resetErrors() {
-        document.querySelectorAll('.error-message').forEach(msg => {
-            msg.style.display = 'none';
-        });
-    }
-
-    showError(errorId, customMessage = null) {
-        const errorElement = document.getElementById(errorId);
-        if (customMessage) {
-            errorElement.textContent = customMessage;
-        }
-        errorElement.style.display = 'block';
-    }
-
-    scrollToFirstError() {
-        const firstError = document.querySelector('.error-message[style*="block"]');
-        if (firstError) {
-            firstError.previousElementSibling.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-    }
-}
-
-// Form Handler
-class RegistrationForm {
-    constructor() {
-        this.form = document.getElementById('registration-form');
-        this.validator = new FormValidator(this.form);
-        this.submitButton = document.querySelector('.submit-button');
-        // URL Google Apps Script Web App
-        this.scriptURL = 'https://script.google.com/macros/s/AKfycby3jz_zK8iqQlK-PvcWA9JCJCxa-Dh9jQpkuGX62f-w3GAU40o0U8ulgIDypuTxeK8u/exec';
-        this.init();
-    }
-
-    init() {
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-    }
-
-    async handleSubmit(e) {
-        e.preventDefault();
-
-        if (!this.validator.validate()) {
-            this.validator.scrollToFirstError();
-            return;
-        }
-
-        // Show loading state
-        this.submitButton.disabled = true;
-        this.submitButton.classList.add('loading');
-        this.submitButton.querySelector('.button-text').textContent = 'Mengirim data...';
-
-        try {
-            // Get form data
-            const formData = await this.getFormData();
-
-            // Log form data (for development)
-            console.log('Form data:', formData);
-
-            // Send to Google Apps Script
-            const response = await this.sendToGoogleScript(formData);
-
-            if (response.status === 'success') {
-                // Show success popup
-                successPopup.show();
-
-                // Reset form
-                this.reset();
-            } else {
-                throw new Error(response.message || 'Gagal mengirim data');
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan saat mengirim data: ' + error.message);
-        } finally {
-            // Reset button state
-            this.submitButton.disabled = false;
-            this.submitButton.classList.remove('loading');
-            this.submitButton.querySelector('.button-text').textContent = 'Daftar Sekarang';
-        }
-    }
-
-    async sendToGoogleScript(data) {
-        // Jika URL belum diset, skip API call (development mode)
-        if (this.scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-            console.log('Development mode - skipping API call');
-            return { status: 'success', message: 'Development mode' };
-        }
-
-        try {
-            // Send data as form-encoded POST request
-            const formData = new URLSearchParams();
-            const payloadStr = JSON.stringify(data);
-            formData.append('payload', payloadStr);
-
-            console.log('Sending payload length:', payloadStr.length);
-            console.log('FormData body:', formData.toString().substring(0, 200) + '...');
-
-            const response = await fetch(this.scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: formData.toString(),
-                redirect: 'follow'
-            });
-
-            console.log('Response status:', response.status);
-            console.log('Response:', response);
-
-            // Try to read response text
-            try {
-                const responseText = await response.text();
-                console.log('Response text:', responseText);
-                const responseData = JSON.parse(responseText);
-
-                if (responseData.status === 'success') {
-                    return responseData;
-                } else {
-                    throw new Error(responseData.message || 'Unknown error');
-                }
-            } catch (parseError) {
-                console.log('Could not parse response, assuming success');
-                // If we can't parse, but got 200, assume success
-                if (response.ok) {
-                    return { status: 'success', message: 'Data terkirim' };
-                }
-                throw parseError;
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-            throw error;
-        }
-    }
-
-    async getFormData() {
-        // Convert files to base64 for Google Apps Script
-        const cvFile = document.getElementById('cv').files[0];
-        const portofolioFile = document.getElementById('portofolio').files[0];
-        const instagramFile = document.getElementById('instagram').files[0];
-        const discordFile = document.getElementById('discord').files[0];
-        const bvFile = document.getElementById('bv').files[0];
-
-        const data = {
-            nama: document.getElementById('nama').value.trim(),
-            npm: document.getElementById('npm').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            fakultas: document.getElementById('fakultas').value,
-            prodi: document.getElementById('prodi').value.trim(),
-            department: departmentSelector.getSelected(),
-            reason: document.getElementById('reason').value.trim(),
-            whatsapp: document.getElementById('whatsapp').value.trim(),
-            cv: await this.fileToBase64(cvFile),
-            portofolio: portofolioFile ? await this.fileToBase64(portofolioFile) : null,
-            instagram: await this.fileToBase64(instagramFile),
-            discord: await this.fileToBase64(discordFile),
-            bv: await this.fileToBase64(bvFile)
-        };
-
-        return data;
-    }
-
-    fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result.split(',')[1];
-                resolve({
-                    name: file.name,
-                    mimeType: file.type,
-                    data: base64
-                });
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
-
-    reset() {
-        this.form.reset();
-        departmentSelector.reset();
-    }
-}
-
-// Success Popup Handler
-class SuccessPopup {
-    constructor() {
-        this.popup = document.getElementById('success-popup');
-        this.init();
-    }
-
-    init() {
-        // Close on outside click
-        this.popup.addEventListener('click', (e) => {
-            if (e.target === this.popup) {
-                this.close();
-            }
-        });
-    }
-
-    show() {
-        this.popup.classList.add('active');
-        this.launchConfetti();
-        this.animateContent();
-    }
-
-    close() {
-        this.popup.classList.remove('active');
-    }
-
-    launchConfetti() {
-        confetti({
-            particleCount: 200,
-            spread: 90,
-            origin: { y: 0.6 },
-            colors: ['#4285f4', '#34a853', '#fbbc05', '#ea4335'],
-            disableForReducedMotion: true
-        });
-
-        // Second burst
-        setTimeout(() => {
-            confetti({
-                particleCount: 100,
-                spread: 60,
-                origin: { y: 0.7 },
-                colors: ['#4285f4', '#34a853', '#fbbc05', '#ea4335'],
-                disableForReducedMotion: true
-            });
-        }, 250);
-    }
-
-    animateContent() {
-        gsap.fromTo('.success-content',
-            { scale: 0.8, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.7)' }
-        );
-    }
-}
-
-// Close success popup function (for inline onclick)
-function closeSuccessPopup() {
-    successPopup.close();
-}
-
-// Data Program Studi per Fakultas (S1 only)
+// Data Program Studi per Fakultas
 const prodiData = {
-    'Fakultas Teknik': [
-        'Teknik Informatika',
-        'Teknik Mesin',
-        'Teknik Industri',
-        'Teknik Lingkungan',
-        'Teknologi Pangan',
-        'Perencanaan Wilayah dan Kota'
-    ],
-    'Fakultas Ekonomi dan Bisnis': [
-        'Akuntansi',
-        'Manajemen',
-        'Ekonomi Pembangunan'
-    ],
-    'Fakultas Hukum': [
-        'Ilmu Hukum'
-    ],
-    'Fakultas Keguruan dan Ilmu Pendidikan': [
-        'Pendidikan Pancasila & Kewarganegaraan',
-        'Pendidikan Ekonomi',
-        'Pendidikan Bahasa dan Sastra Indonesia',
-        'Pendidikan Matematika',
-        'Pendidikan Biologi',
-        'Pendidikan Guru Sekolah Dasar'
-    ],
-    'Fakultas Ilmu Sosial dan Ilmu Politik': [
-        'Administrasi Publik',
-        'Ilmu Kesejahteraan Sosial',
-        'Ilmu Hubungan Internasional',
-        'Ilmu Administrasi Bisnis',
-        'Ilmu Komunikasi'
-    ],
-    'Fakultas Kedokteran': [
-        'Kedokteran'
-    ],
-    'Fakultas Ilmu Seni dan Sastra': [
-        'Sastra Inggris',
-        'Desain Komunikasi Visual',
-        'Fotografi',
-        'Seni Musik'
-    ]
+  "Fakultas Teknik": [
+    "Teknik Informatika",
+    "Teknik Mesin",
+    "Teknik Industri",
+    "Teknik Lingkungan",
+    "Teknologi Pangan",
+    "Perencanaan Wilayah dan Kota",
+  ],
+  "Fakultas Ekonomi dan Bisnis": [
+    "Akuntansi",
+    "Manajemen",
+    "Ekonomi Pembangunan",
+  ],
+  "Fakultas Hukum": ["Ilmu Hukum"],
+  "Fakultas Keguruan dan Ilmu Pendidikan": [
+    "Pendidikan Pancasila & Kewarganegaraan",
+    "Pendidikan Ekonomi",
+    "Pendidikan Bahasa dan Sastra Indonesia",
+    "Pendidikan Matematika",
+    "Pendidikan Biologi",
+    "Pendidikan Guru Sekolah Dasar",
+  ],
+  "Fakultas Ilmu Sosial dan Ilmu Politik": [
+    "Administrasi Publik",
+    "Ilmu Kesejahteraan Sosial",
+    "Ilmu Hubungan Internasional",
+    "Ilmu Administrasi Bisnis",
+    "Ilmu Komunikasi",
+  ],
+  "Fakultas Kedokteran": ["Kedokteran"],
+  "Fakultas Ilmu Seni dan Sastra": [
+    "Sastra Inggris",
+    "Desain Komunikasi Visual",
+    "Fotografi",
+    "Seni Musik",
+  ],
 };
 
-// Prodi Selector Handler
-class ProdiSelector {
-    constructor() {
-        this.fakultasSelect = document.getElementById('fakultas');
-        this.prodiSelect = document.getElementById('prodi');
-        this.init();
+// Department Manager Class
+class DepartmentManager {
+  constructor() {
+    this.selected = [];
+    this.maxSelect = 2;
+    this.cards = document.querySelectorAll(".dept-card");
+    this.hiddenInput = document.getElementById("department");
+    this.counter = document.querySelector(".selection-counter");
+    this.counterNum = document.querySelector(".counter-number");
+    this.init();
+  }
+
+  init() {
+    this.cards.forEach((card) => {
+      card.addEventListener("click", () => this.toggle(card));
+    });
+  }
+
+  toggle(card) {
+    const dept = card.getAttribute("data-dept");
+    const isSelected = this.selected.includes(dept);
+
+    if (isSelected) {
+      this.selected = this.selected.filter((d) => d !== dept);
+      card.classList.remove("selected");
+    } else {
+      if (this.selected.length >= this.maxSelect) {
+        this.showAlert();
+        this.shakeCard(card);
+        return;
+      }
+      this.selected.push(dept);
+      card.classList.add("selected");
     }
 
-    init() {
-        this.fakultasSelect.addEventListener('change', () => this.updateProdiOptions());
+    this.updateUI();
+  }
+
+  updateUI() {
+    this.counterNum.textContent = this.selected.length;
+    this.hiddenInput.value = this.selected.join(", ");
+
+    if (this.selected.length > 0) {
+      this.counter.classList.add("active");
+      const errorEl = document.getElementById("department-error");
+      if (errorEl) errorEl.style.display = "none";
+    } else {
+      this.counter.classList.remove("active");
     }
 
-    updateProdiOptions() {
-        const selectedFakultas = this.fakultasSelect.value;
-        this.prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
+    this.cards.forEach((card) => {
+      const dept = card.getAttribute("data-dept");
+      if (
+        !this.selected.includes(dept) &&
+        this.selected.length >= this.maxSelect
+      ) {
+        card.classList.add("disabled");
+      } else {
+        card.classList.remove("disabled");
+      }
+    });
+  }
 
-        if (selectedFakultas && prodiData[selectedFakultas]) {
-            this.prodiSelect.disabled = false;
-            prodiData[selectedFakultas].forEach(prodi => {
-                const option = document.createElement('option');
-                option.value = prodi;
-                option.textContent = prodi;
-                this.prodiSelect.appendChild(option);
-            });
-        } else {
-            this.prodiSelect.disabled = true;
-            this.prodiSelect.innerHTML = '<option value="">Pilih Fakultas terlebih dahulu</option>';
-        }
-    }
+  shakeCard(card) {
+    card.style.animation = "shake 0.5s";
+    setTimeout(() => (card.style.animation = ""), 500);
+  }
+
+  showAlert() {
+    const alert = document.createElement("div");
+    alert.className = "custom-alert";
+    alert.innerHTML = `
+      <div class="alert-box">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-msg">Maksimal ${this.maxSelect} departemen dapat dipilih!</span>
+      </div>
+    `;
+    document.body.appendChild(alert);
+
+    setTimeout(() => alert.classList.add("show"), 10);
+    setTimeout(() => {
+      alert.classList.remove("show");
+      setTimeout(() => alert.remove(), 300);
+    }, 2000);
+  }
+
+  reset() {
+    this.selected = [];
+    this.cards.forEach((c) => c.classList.remove("selected", "disabled"));
+    this.updateUI();
+  }
 }
 
-// Video Manager - Handles both desktop dropdown and mobile modal
+// Custom Select Handler Class
+class SelectHandler {
+  constructor() {
+    this.selects = document.querySelectorAll(".select-modern");
+    this.init();
+  }
+
+  init() {
+    this.selects.forEach((select) => {
+      const trigger = select.querySelector(".select-trigger-modern");
+      const items = select.querySelectorAll(".select-item");
+      const selectName = select.getAttribute("data-select");
+      const hidden = document.getElementById(selectName);
+
+      trigger.addEventListener("click", () => {
+        if (!select.classList.contains("disabled")) {
+          this.closeAll();
+          select.classList.add("active");
+        }
+      });
+
+      items.forEach((item) => {
+        item.addEventListener("click", () => {
+          const value = item.getAttribute("data-value");
+          const text = item.textContent;
+
+          if (hidden) hidden.value = value;
+          select.querySelector(".select-text").textContent = text;
+
+          items.forEach((i) => i.classList.remove("selected"));
+          item.classList.add("selected");
+
+          select.classList.remove("active");
+
+          if (value) {
+            const errorEl = document.getElementById(`${selectName}-error`);
+            if (errorEl) errorEl.style.display = "none";
+          }
+
+          if (selectName === "fakultas") {
+            prodiHandler.update(value);
+          }
+        });
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".select-modern")) {
+        this.closeAll();
+      }
+    });
+  }
+
+  closeAll() {
+    this.selects.forEach((s) => s.classList.remove("active"));
+  }
+}
+
+// Prodi Handler Class
+class ProdiHandler {
+  constructor() {
+    this.select = document.querySelector('[data-select="prodi"]');
+    this.menu = this.select?.querySelector(".select-menu");
+    this.text = this.select?.querySelector(".select-text");
+    this.hidden = document.getElementById("prodi");
+  }
+
+  update(fakultas) {
+    if (!this.menu) return;
+
+    this.menu.innerHTML = "";
+
+    if (fakultas && prodiData[fakultas]) {
+      this.select.classList.remove("disabled");
+      this.text.textContent = "Pilih Program Studi";
+
+      const empty = document.createElement("div");
+      empty.className = "select-item";
+      empty.setAttribute("data-value", "");
+      empty.textContent = "Pilih Program Studi";
+      this.menu.appendChild(empty);
+
+      prodiData[fakultas].forEach((prodi) => {
+        const item = document.createElement("div");
+        item.className = "select-item";
+        item.setAttribute("data-value", prodi);
+        item.textContent = prodi;
+
+        item.addEventListener("click", () => {
+          this.hidden.value = prodi;
+          this.text.textContent = prodi;
+          this.menu
+            .querySelectorAll(".select-item")
+            .forEach((i) => i.classList.remove("selected"));
+          item.classList.add("selected");
+          this.select.classList.remove("active");
+
+          const errorEl = document.getElementById("prodi-error");
+          if (errorEl) errorEl.style.display = "none";
+        });
+
+        this.menu.appendChild(item);
+      });
+    } else {
+      this.select.classList.add("disabled");
+      this.text.textContent = "Pilih Fakultas terlebih dahulu";
+      this.hidden.value = "";
+    }
+  }
+}
+
+// File Input Handler Class with Preview
+class FileHandler {
+  constructor() {
+    this.inputs = document.querySelectorAll(".file-hidden");
+    this.init();
+  }
+
+  init() {
+    this.inputs.forEach((input) => {
+      const box = input.closest(".file-upload-box");
+      const display = box?.querySelector(".file-display");
+      const fileInfo = display?.querySelector(".file-info");
+
+      if (display) {
+        display.addEventListener("click", (e) => {
+          if (!e.target.closest(".file-cancel-btn")) {
+            input.click();
+          }
+        });
+      }
+
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          this.showPreview(input, file, display, fileInfo);
+
+          const errorId = input.id + "-error";
+          const errorEl = document.getElementById(errorId);
+          if (errorEl) errorEl.style.display = "none";
+        }
+      });
+    });
+  }
+
+  showPreview(input, file, display, fileInfo) {
+    display.classList.add("has-file");
+
+    const existingPreview = display.querySelector(".file-preview");
+    if (existingPreview) {
+      existingPreview.remove();
+    }
+
+    const preview = document.createElement("div");
+    preview.className = "file-preview show";
+
+    // Truncate filename if too long
+    const truncatedName = this.truncateFileName(file.name, 25);
+
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.innerHTML = `
+          <img src="${e.target.result}" alt="Preview">
+          <div class="file-preview-info">
+            <div class="file-preview-name" title="${
+              file.name
+            }">${truncatedName}</div>
+            <div class="file-preview-size">${this.formatFileSize(
+              file.size
+            )}</div>
+          </div>
+          <button type="button" class="file-cancel-btn">
+            <i data-lucide="x"></i>
+            Hapus
+          </button>
+        `;
+
+        if (typeof lucide !== "undefined") {
+          lucide.createIcons();
+        }
+
+        this.attachCancelHandler(input, display, fileInfo, preview);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      preview.innerHTML = `
+        <div class="file-preview-icon">
+          <i data-lucide="file-text"></i>
+        </div>
+        <div class="file-preview-info">
+          <div class="file-preview-name" title="${
+            file.name
+          }">${truncatedName}</div>
+          <div class="file-preview-size">${this.formatFileSize(file.size)}</div>
+        </div>
+        <button type="button" class="file-cancel-btn">
+          <i data-lucide="x"></i>
+          Hapus
+        </button>
+      `;
+
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+      }
+
+      this.attachCancelHandler(input, display, fileInfo, preview);
+    }
+
+    display.appendChild(preview);
+  }
+
+  attachCancelHandler(input, display, fileInfo, preview) {
+    const cancelBtn = preview.querySelector(".file-cancel-btn");
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        input.value = "";
+        preview.remove();
+        display.classList.remove("has-file");
+      });
+    }
+  }
+
+  truncateFileName(filename, maxLength) {
+    if (filename.length <= maxLength) return filename;
+
+    const extension = filename.split(".").pop();
+    const nameWithoutExt = filename.substring(0, filename.lastIndexOf("."));
+    const truncatedName = nameWithoutExt.substring(
+      0,
+      maxLength - extension.length - 4
+    );
+
+    return `${truncatedName}...${extension}`;
+  }
+
+  formatFileSize(bytes) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+  }
+}
+
+// Form Validator Class
+class FormValidator {
+  validate() {
+    this.hideAllErrors();
+    let valid = true;
+
+    // Nama
+    if (!document.getElementById("nama").value.trim()) {
+      this.showError("nama-error", "Nama harus diisi");
+      valid = false;
+    }
+
+    // NPM - only numbers
+    const npm = document.getElementById("npm").value.trim();
+    if (!npm) {
+      this.showError("npm-error", "NPM harus diisi");
+      valid = false;
+    } else if (!/^\d+$/.test(npm)) {
+      this.showError("npm-error", "NPM hanya boleh angka");
+      valid = false;
+    }
+
+    // Email
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+      this.showError("email-error", "Email harus diisi");
+      valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.showError("email-error", "Format email tidak valid");
+      valid = false;
+    }
+
+    // WhatsApp - only numbers
+    const wa = document.getElementById("whatsapp").value.trim();
+    if (!wa) {
+      this.showError("whatsapp-error", "Nomor WhatsApp harus diisi");
+      valid = false;
+    } else if (!/^[0-9]{10,13}$/.test(wa)) {
+      this.showError("whatsapp-error", "Nomor WhatsApp harus 10-13 digit");
+      valid = false;
+    }
+
+    // Fakultas
+    if (!document.getElementById("fakultas").value) {
+      this.showError("fakultas-error", "Fakultas harus dipilih");
+      valid = false;
+    }
+
+    // Prodi
+    if (!document.getElementById("prodi").value) {
+      this.showError("prodi-error", "Program Studi harus dipilih");
+      valid = false;
+    }
+
+    // Department
+    if (!deptManager.selected.length) {
+      this.showError("department-error", "Minimal 1 departemen harus dipilih");
+      valid = false;
+    }
+
+    // Reason
+    if (!document.getElementById("reason").value.trim()) {
+      this.showError("reason-error", "Alasan harus diisi");
+      valid = false;
+    }
+
+    // CV
+    if (!document.getElementById("cv").files[0]) {
+      this.showError("cv-error", "CV harus diupload (format PDF)");
+      valid = false;
+    }
+
+    // Instagram
+    if (!document.getElementById("instagram").files[0]) {
+      this.showError("instagram-error", "Wajib upload");
+      valid = false;
+    }
+
+    // Discord
+    if (!document.getElementById("discord").files[0]) {
+      this.showError("discord-error", "Wajib upload");
+      valid = false;
+    }
+
+    // Bevy
+    if (!document.getElementById("bv").files[0]) {
+      this.showError("bv-error", "Wajib upload");
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  showError(id, msg) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = msg;
+      el.style.display = "block";
+    }
+  }
+
+  hideAllErrors() {
+    document
+      .querySelectorAll(".error-msg")
+      .forEach((e) => (e.style.display = "none"));
+  }
+}
+
+// Form Handler Class
+class FormHandler {
+  constructor() {
+    this.form = document.getElementById("registration-form");
+    this.validator = new FormValidator();
+    this.btn = document.querySelector(".btn-submit");
+    this.scriptURL =
+      "https://script.google.com/macros/s/AKfycby2RbKwWav_o3k1ik-A6DR-IdglUy6LxFaX_TqY25I6f6ACnJq88bMqRteBmy50Jsp2/exec";
+    this.init();
+  }
+
+  init() {
+    this.form.addEventListener("submit", (e) => this.submit(e));
+
+    // NPM input - numbers only
+    const npmInput = document.getElementById("npm");
+    if (npmInput) {
+      npmInput.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      });
+    }
+
+    // WhatsApp input - numbers only
+    const waInput = document.getElementById("whatsapp");
+    if (waInput) {
+      waInput.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      });
+    }
+  }
+
+  async submit(e) {
+    e.preventDefault();
+
+    if (!this.validator.validate()) {
+      this.scrollToFirstError();
+      return;
+    }
+
+    this.btn.disabled = true;
+    this.btn.querySelector(".btn-text").textContent = "Mengirim...";
+
+    // Show loading overlay
+    const loadingOverlay = document.getElementById("loading-overlay");
+    if (loadingOverlay) {
+      loadingOverlay.classList.add("active");
+    }
+
+    try {
+      const data = await this.getData();
+      const res = await this.send(data);
+
+      if (res.status === "success") {
+        this.showSuccess();
+        this.reset();
+      } else {
+        throw new Error("Gagal mengirim data");
+      }
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      this.btn.disabled = false;
+      this.btn.querySelector(".btn-text").textContent = "Daftar Sekarang";
+
+      // Hide loading overlay
+      if (loadingOverlay) {
+        loadingOverlay.classList.remove("active");
+      }
+    }
+  }
+
+  async getData() {
+    const cv = document.getElementById("cv").files[0];
+    const porto = document.getElementById("portofolio").files[0];
+    const ig = document.getElementById("instagram").files[0];
+    const dc = document.getElementById("discord").files[0];
+    const bv = document.getElementById("bv").files[0];
+
+    return {
+      nama: document.getElementById("nama").value.trim(),
+      npm: document.getElementById("npm").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      whatsapp: document.getElementById("whatsapp").value.trim(),
+      fakultas: document.getElementById("fakultas").value,
+      prodi: document.getElementById("prodi").value,
+      department: deptManager.selected.join(", "),
+      reason: document.getElementById("reason").value.trim(),
+      cv: await this.toBase64(cv),
+      portofolio: porto ? await this.toBase64(porto) : null,
+      instagram: await this.toBase64(ig),
+      discord: await this.toBase64(dc),
+      bv: await this.toBase64(bv),
+    };
+  }
+
+  async send(data) {
+    const formData = new URLSearchParams();
+    formData.append("payload", JSON.stringify(data));
+
+    const res = await fetch(this.scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    });
+
+    if (res.ok) return { status: "success" };
+    throw new Error("Network error");
+  }
+
+  toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve({
+          name: file.name,
+          mimeType: file.type,
+          data: reader.result.split(",")[1],
+        });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  scrollToFirstError() {
+    const firstError = document.querySelector('.error-msg[style*="block"]');
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  showSuccess() {
+    const popup = document.getElementById("success-popup");
+    popup.classList.add("active");
+
+    // First confetti burst
+    confetti({
+      particleCount: 200,
+      spread: 90,
+      origin: { y: 0.6 },
+      colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
+    });
+
+    // Second confetti burst
+    setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        spread: 60,
+        origin: { y: 0.7 },
+        colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
+      });
+    }, 250);
+
+    // GSAP animation for popup
+    gsap.fromTo(
+      ".success-box",
+      { scale: 0.8, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+    );
+  }
+
+  reset() {
+    this.form.reset();
+    deptManager.reset();
+
+    // Reset all file uploads
+    document.querySelectorAll(".file-display").forEach((display) => {
+      display.classList.remove("has-file");
+
+      // Remove preview
+      const preview = display.querySelector(".file-preview");
+      if (preview) {
+        preview.remove();
+      }
+    });
+
+    // Reset file inputs
+    document.querySelectorAll(".file-hidden").forEach((input) => {
+      input.value = "";
+    });
+  }
+}
+
+// Video Manager Class
 class VideoManager {
     constructor() {
-        this.desktopSection = document.getElementById('video-section-desktop');
+        this.desktopContainer = document.getElementById('video-section-desktop');
+        this.mobileModalBody = document.getElementById('video-modal-body');
         this.modal = document.getElementById('video-modal');
-        this.modalBody = document.getElementById('video-modal-body');
-        this.modalClose = document.getElementById('video-modal-close');
         this.navbarBtn = document.getElementById('navbar-video-btn');
-        this.currentPlayer = null;
+        this.modalCloseBtn = document.getElementById('video-modal-close');
         this.init();
     }
 
     init() {
-        // Render videos from config
-        this.renderDesktopVideos();
-        this.renderModalVideos();
-
-        // Modal handlers
-        if (this.modalClose) {
-            this.modalClose.addEventListener('click', () => this.closeModal());
+        // Inject videos to desktop section
+        if (this.desktopContainer) {
+            this.injectVideos(this.desktopContainer);
         }
 
-        if (this.modal) {
-            this.modal.querySelector('.video-modal-overlay')?.addEventListener('click', () => this.closeModal());
+        // Inject videos to mobile modal
+        if (this.mobileModalBody) {
+            this.injectVideos(this.mobileModalBody);
         }
 
-        // Navbar button - mobile only
+        // Setup mobile modal handlers
         if (this.navbarBtn) {
-            this.navbarBtn.addEventListener('click', () => this.openModal());
+            this.navbarBtn.addEventListener('click', () => {
+                this.modal.classList.add('active');
+            });
+        }
+
+        if (this.modalCloseBtn) {
+            this.modalCloseBtn.addEventListener('click', () => {
+                this.modal.classList.remove('active');
+            });
+        }
+
+        // Close modal on overlay click
+        if (this.modal) {
+            this.modal.querySelector('.video-modal-overlay')?.addEventListener('click', () => {
+                this.modal.classList.remove('active');
+            });
         }
     }
 
-    renderDesktopVideos() {
-        if (!this.desktopSection || !videoConfig) return;
-
+    injectVideos(container) {
         videoConfig.forEach((video) => {
             const videoHTML = `
-                <div class="video-toggle" id="video-toggle-${video.id}">
-                    <div class="video-toggle-header">
-                        <span class="video-toggle-title">📺 ${video.title}</span>
-                        <span class="video-toggle-icon">▼</span>
+                <div class="video-player" data-video-id="${video.id}">
+                    <div class="video-toggle">
+                        <div class="video-toggle-header">
+                            <span class="video-toggle-title">${video.title}</span>
+                            <span class="video-toggle-icon">▼</span>
+                        </div>
                     </div>
-                </div>
-                <div class="video-dropdown" id="video-dropdown-${video.id}">
-                    <div class="video-container">
-                        <iframe src="${video.embedUrl}"
+                    <div class="video-dropdown">
+                        <div class="video-container">
+                            <iframe
+                                src="${video.embedUrl}"
                                 title="${video.title}"
                                 frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen></iframe>
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             `;
-
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = videoHTML;
-            this.desktopSection.appendChild(wrapper);
-
-            // Add toggle handler
-            const toggle = document.getElementById(`video-toggle-${video.id}`);
-            const dropdown = document.getElementById(`video-dropdown-${video.id}`);
-
-            if (toggle && dropdown) {
-                toggle.addEventListener('click', () => {
-                    toggle.classList.toggle('active');
-                    dropdown.classList.toggle('active');
-                });
-            }
+            container.insertAdjacentHTML('beforeend', videoHTML);
         });
-    }
 
-    renderModalVideos() {
-        if (!this.modalBody || !videoConfig) return;
+        // Add toggle functionality
+        container.querySelectorAll('.video-toggle').forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const player = toggle.closest('.video-player');
+                const dropdown = player.querySelector('.video-dropdown');
 
-        videoConfig.forEach(video => {
-            const videoItem = document.createElement('div');
-            videoItem.className = 'video-item';
-            videoItem.innerHTML = `
-                <div class="video-item-title">
-                    📺 ${video.title}
-                </div>
-                <div class="video-item-description">${video.description}</div>
-                <div class="video-player" id="player-${video.id}">
-                    <div class="video-container">
-                        <iframe src="${video.embedUrl}"
-                                title="${video.title}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen></iframe>
-                    </div>
-                </div>
-            `;
-
-            videoItem.addEventListener('click', (e) => {
-                if (!e.target.closest('.video-player')) {
-                    this.togglePlayer(video.id);
-                }
+                toggle.classList.toggle('active');
+                dropdown.classList.toggle('active');
             });
-
-            this.modalBody.appendChild(videoItem);
         });
-    }
-
-    togglePlayer(videoId) {
-        const player = document.getElementById(`player-${videoId}`);
-        if (!player) return;
-
-        // Close current player if different
-        if (this.currentPlayer && this.currentPlayer !== player) {
-            this.currentPlayer.classList.remove('active');
-        }
-
-        player.classList.toggle('active');
-        this.currentPlayer = player.classList.contains('active') ? player : null;
-
-        // Smooth scroll to player
-        if (this.currentPlayer) {
-            setTimeout(() => {
-                player.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-        }
-    }
-
-    openModal() {
-        if (this.modal) {
-            this.modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    closeModal() {
-        if (this.modal) {
-            this.modal.classList.remove('active');
-            document.body.style.overflow = '';
-
-            // Close all players
-            if (this.currentPlayer) {
-                this.currentPlayer.classList.remove('active');
-                this.currentPlayer = null;
-            }
-        }
     }
 }
 
-// File Upload Preview Handler
-function initFileUploads() {
-    const fileInputs = ['cv', 'portofolio', 'instagram', 'discord', 'bv'];
-
-    fileInputs.forEach(inputId => {
-        const input = document.getElementById(inputId);
-        const filenameSpan = document.getElementById(`${inputId}-filename`);
-
-        if (input && filenameSpan) {
-            input.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    filenameSpan.textContent = file.name;
-                    filenameSpan.style.color = '#4285f4';
-                    filenameSpan.style.fontWeight = '500';
-                }
-            });
-        }
-    });
+// Close Success Popup Function
+function closeSuccessPopup() {
+  const popup = document.getElementById("success-popup");
+  popup.classList.remove("active");
 }
 
-// Initialize everything when DOM is ready
-let departmentSelector;
-let prodiSelector;
-let registrationForm;
-let successPopup;
-let videoManager;
+// Global Variables
+let deptManager, selectHandler, prodiHandler, fileHandler, formHandler, videoManager;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize particles
-    initParticles();
+// Initialize Everything
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize particles background
+  initParticles();
 
-    // Initialize components
-    departmentSelector = new DepartmentSelector();
-    prodiSelector = new ProdiSelector();
-    registrationForm = new RegistrationForm();
-    successPopup = new SuccessPopup();
-    videoManager = new VideoManager();
+  // Initialize all components
+  deptManager = new DepartmentManager();
+  selectHandler = new SelectHandler();
+  prodiHandler = new ProdiHandler();
+  fileHandler = new FileHandler();
+  formHandler = new FormHandler();
+  videoManager = new VideoManager();
 
-    // Initialize file uploads
-    initFileUploads();
+  // Initialize Lucide icons
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
+  }
 
-    console.log('GDGOC Registration Form initialized successfully!');
+  // Add custom CSS animations
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .custom-alert {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      z-index: 10000;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .custom-alert.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .alert-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border-left: 4px solid #fbbc05;
+    }
+
+    .alert-icon {
+      font-size: 1.5rem;
+    }
+
+    .alert-msg {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #202124;
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log("✅ GDGOC Registration Form initialized successfully!");
 });

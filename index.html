@@ -12,13 +12,13 @@
     <!-- External Stylesheets -->
     <link rel="stylesheet" href="assets/css/styles.css">
 
-    <!-- Material Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Custom Script -->
     <script src="assets/js/script.js" defer></script>
@@ -42,305 +42,406 @@
     <main class="container">
         <div class="content-grid">
             <div class="form-container">
-                <h1 class="form-title">Pendaftaran GDGOC</h1>
-                <p class="form-subtitle">Universitas Pasundan</p>
+                <div class="form-header">
+                    <h1 class="page-title">Form Pendaftaran GDGOC</h1>
+                    <p class="page-subtitle">Universitas Pasundan</p>
+                </div>
 
                 <form id="registration-form" novalidate>
-                <!-- Nama Lengkap -->
-                <div class="form-group">
-                    <label for="nama" class="form-label">
-                        Nama Lengkap<span class="required">*</span>
-                    </label>
-                    <input type="text"
-                           id="nama"
-                           name="nama"
-                           class="form-input"
-                           autocomplete="name"
-                           required>
-                    <div class="error-message" id="nama-error">Nama harus diisi</div>
-                </div>
-
-                <!-- NPM -->
-                <div class="form-group">
-                    <label for="npm" class="form-label">
-                        NPM<span class="required">*</span>
-                    </label>
-                    <input type="text"
-                           id="npm"
-                           name="npm"
-                           class="form-input"
-                           required>
-                    <div class="error-message" id="npm-error">NPM harus diisi</div>
-                </div>
-
-                <!-- Email -->
-                <div class="form-group">
-                    <label for="email" class="form-label">
-                        Email<span class="required">*</span>
-                    </label>
-                    <input type="email"
-                           id="email"
-                           name="email"
-                           class="form-input"
-                           placeholder="contoh@email.com"
-                           required>
-                    <div class="error-message" id="email-error">Email harus diisi dengan format yang benar</div>
-                </div>
-
-                <!-- Fakultas -->
-                <div class="form-group">
-                    <label for="fakultas" class="form-label">
-                        Fakultas<span class="required">*</span>
-                    </label>
-                    <select id="fakultas" name="fakultas" class="form-select" required>
-                        <option value="">Pilih Fakultas</option>
-                        <option value="Fakultas Teknik">Fakultas Teknik</option>
-                        <option value="Fakultas Ekonomi dan Bisnis">Fakultas Ekonomi dan Bisnis</option>
-                        <option value="Fakultas Hukum">Fakultas Hukum</option>
-                        <option value="Fakultas Keguruan dan Ilmu Pendidikan">Fakultas Keguruan dan Ilmu Pendidikan</option>
-                        <option value="Fakultas Ilmu Sosial dan Ilmu Politik">Fakultas Ilmu Sosial dan Ilmu Politik</option>
-                        <option value="Fakultas Kedokteran">Fakultas Kedokteran</option>
-                        <option value="Fakultas Ilmu Seni dan Sastra">Fakultas Ilmu Seni dan Sastra</option>
-                    </select>
-                    <div class="error-message" id="fakultas-error">Fakultas harus dipilih</div>
-                </div>
-
-                <!-- Program Studi -->
-                <div class="form-group">
-                    <label for="prodi" class="form-label">
-                        Program Studi<span class="required">*</span>
-                    </label>
-                    <select id="prodi" name="prodi" class="form-select" required disabled>
-                        <option value="">Pilih Fakultas terlebih dahulu</option>
-                    </select>
-                    <div class="error-message" id="prodi-error">Program Studi harus dipilih</div>
-                </div>
-
-                <!-- Pilihan Departemen -->
-                <div class="form-group">
-                    <label class="form-label">
-                        Pilih Departemen (Maksimal 2)<span class="required">*</span>
-                    </label>
-                    <p class="form-help-text">Pilih 1-2 departemen yang Anda minati</p>
-                    <div class="department-grid">
-                        <div class="department-card" data-department="HUMAN RESOURCE" role="button" tabindex="0">
-                            <div class="department-icon">👥</div>
-                            <div class="department-name">Human Resource</div>
-                        </div>
-                        <div class="department-card" data-department="MEDIA CREATIVE" role="button" tabindex="0">
-                            <div class="department-icon">🎨</div>
-                            <div class="department-name">Media Creative</div>
-                        </div>
-                        <div class="department-card" data-department="EVENT" role="button" tabindex="0">
-                            <div class="department-icon">📅</div>
-                            <div class="department-name">Event</div>
-                        </div>
-                        <div class="department-card" data-department="PUBLIC RELATIONSHIP" role="button" tabindex="0">
-                            <div class="department-icon">📢</div>
-                            <div class="department-name">Public Relationship</div>
-                        </div>
-                        <div class="department-card" data-department="Curriculum Web" role="button" tabindex="0">
-                            <div class="department-icon">🌐</div>
-                            <div class="department-name">Curriculum Web</div>
-                        </div>
-                        <div class="department-card" data-department="Curriculum IoT" role="button" tabindex="0">
-                            <div class="department-icon">🔌</div>
-                            <div class="department-name">Curriculum IoT</div>
-                        </div>
-                        <div class="department-card" data-department="Curriculum ML" role="button" tabindex="0">
-                            <div class="department-icon">🤖</div>
-                            <div class="department-name">Curriculum ML</div>
-                        </div>
-                        <div class="department-card" data-department="Curriculum Game" role="button" tabindex="0">
-                            <div class="department-icon">🎮</div>
-                            <div class="department-name">Curriculum Game</div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="department" name="department" required>
-                    <div class="error-message" id="department-error">Minimal 1 departemen harus dipilih</div>
-                </div>
-
-                <!-- Alasan Memilih Departemen -->
-                <div class="form-group">
-                    <label for="reason" class="form-label">
-                        Alasan Memilih Departemen Tersebut<span class="required">*</span>
-                    </label>
-                    <textarea id="reason"
-                             name="reason"
-                             class="form-textarea"
-                             rows="4"
-                             placeholder="Jelaskan alasan Anda memilih departemen tersebut..."
-                             required></textarea>
-                    <div class="error-message" id="reason-error">Alasan harus diisi</div>
-                </div>
-
-                <!-- CV Upload -->
-                <div class="form-group">
-                    <label class="form-label">
-                        Upload CV (PDF, Max 2MB)<span class="required">*</span>
-                    </label>
-                    <div class="file-upload-wrapper">
-                        <label for="cv" class="form-file file-upload-label">
-                            <span class="file-upload-icon">
-                                <span class="material-symbols-outlined">description</span>
-                            </span>
-                            <div class="file-upload-text">
-                                <span class="file-upload-title">Pilih file PDF</span>
-                                <span class="file-upload-subtitle" id="cv-filename">Maksimal 2MB</span>
+                    <!-- Row 1: Nama & NPM -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="nama" class="label-modern">
+                                Nama Lengkap<span class="required">*</span>
+                            </label>
+                            <div class="input-box">
+                                <i data-lucide="user" class="input-icon-left"></i>
+                                <input type="text"
+                                       id="nama"
+                                       name="nama"
+                                       class="input-modern"
+                                       placeholder="Masukkan nama lengkap"
+                                       autocomplete="name"
+                                       required>
                             </div>
-                        </label>
-                        <input type="file"
-                               id="cv"
-                               name="cv"
-                               class="file-input-hidden"
-                               accept=".pdf"
-                               required>
-                    </div>
-                    <div class="error-message" id="cv-error">CV harus diupload (format PDF)</div>
-                </div>
+                            <span class="error-msg" id="nama-error">Nama harus diisi</span>
+                        </div>
 
-                <!-- Portofolio Upload (Optional) -->
-                <div class="form-group">
-                    <label class="form-label">
-                        Upload Portofolio (PDF, Max 2MB)<span class="optional">(Opsional)</span>
-                    </label>
-                    <div class="file-upload-wrapper">
-                        <label for="portofolio" class="form-file file-upload-label">
-                            <span class="file-upload-icon">
-                                <span class="material-symbols-outlined">folder_open</span>
-                            </span>
-                            <div class="file-upload-text">
-                                <span class="file-upload-title">Pilih file PDF (opsional)</span>
-                                <span class="file-upload-subtitle" id="portofolio-filename">Maksimal 2MB</span>
+                        <div class="input-group">
+                            <label for="npm" class="label-modern">
+                                NPM<span class="required">*</span>
+                            </label>
+                            <div class="input-box">
+                                <i data-lucide="hash" class="input-icon-left"></i>
+                                <input type="text"
+                                       id="npm"
+                                       name="npm"
+                                       class="input-modern"
+                                       placeholder="Masukkan NPM"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
+                                       required>
                             </div>
-                        </label>
-                        <input type="file"
-                               id="portofolio"
-                               name="portofolio"
-                               class="file-input-hidden"
-                               accept=".pdf">
+                            <span class="error-msg" id="npm-error">NPM harus diisi (hanya angka)</span>
+                        </div>
                     </div>
-                    <div class="error-message" id="portofolio-error">Ukuran portofolio maksimal 2MB</div>
-                </div>
 
-                <!-- Bukti Follow Instagram -->
-                <div class="form-group">
-                    <label for="instagram" class="form-label">
-                        Upload Bukti Follow Instagram @gdgoc.unpas (Gambar)<span class="required">*</span>
-                    </label>
-                    <p class="form-help-text">
-                        <a href="https://www.instagram.com/gdgoc.unpas/" target="_blank" rel="noopener noreferrer" class="form-link">
-                            Follow Instagram kami - Klik disini 👈🏻
-                        </a>
-                    </p>
-                    <div class="file-upload-wrapper">
-                        <label for="instagram" class="form-file file-upload-label">
-                            <span class="file-upload-icon">
-                                <span class="material-symbols-outlined">image</span>
-                            </span>
-                            <div class="file-upload-text">
-                                <span class="file-upload-title">Pilih gambar bukti follow</span>
-                                <span class="file-upload-subtitle" id="instagram-filename">Format: JPG, PNG</span>
+                    <!-- Row 2: Email & WhatsApp -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="email" class="label-modern">
+                                Email<span class="required">*</span>
+                            </label>
+                            <div class="input-box">
+                                <i data-lucide="mail" class="input-icon-left"></i>
+                                <input type="email"
+                                       id="email"
+                                       name="email"
+                                       class="input-modern"
+                                       placeholder="example@email.com"
+                                       autocomplete="email"
+                                       required>
                             </div>
-                        </label>
-                        <input type="file"
-                               id="instagram"
-                               name="instagram"
-                               class="file-input-hidden"
-                               accept="image/*"
-                               required>
-                    </div>
-                    <div class="error-message" id="instagram-error">Bukti follow Instagram harus diupload</div>
-                </div>
+                            <span class="error-msg" id="email-error">Email harus diisi dengan format yang benar</span>
+                        </div>
 
-                <!-- Bukti Join Discord -->
-                <div class="form-group">
-                    <label for="discord" class="form-label">
-                        Upload Bukti Join Discord UNPAS (Gambar)<span class="required">*</span>
-                    </label>
-                    <p class="form-help-text">
-                        <a href="https://discord.gg/unpas" target="_blank" rel="noopener noreferrer" class="form-link">
-                            Join Discord UNPAS - Klik disini 👈🏻
-                        </a>
-                    </p>
-                    <div class="file-upload-wrapper">
-                        <label for="discord" class="form-file file-upload-label">
-                            <span class="file-upload-icon">
-                                <span class="material-symbols-outlined">image</span>
-                            </span>
-                            <div class="file-upload-text">
-                                <span class="file-upload-title">Pilih gambar bukti join Discord</span>
-                                <span class="file-upload-subtitle" id="discord-filename">Format: JPG, PNG</span>
+                        <div class="input-group">
+                            <label for="whatsapp" class="label-modern">
+                                Nomor WhatsApp<span class="required">*</span>
+                            </label>
+                            <div class="input-box">
+                                <i data-lucide="phone" class="input-icon-left"></i>
+                                <input type="tel"
+                                       id="whatsapp"
+                                       name="whatsapp"
+                                       class="input-modern"
+                                       placeholder="08123456789"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
+                                       required>
                             </div>
-                        </label>
-                        <input type="file"
-                               id="discord"
-                               name="discord"
-                               class="file-input-hidden"
-                               accept="image/*"
-                               required>
+                            <span class="error-msg" id="whatsapp-error">Nomor WhatsApp harus 10-13 digit</span>
+                        </div>
                     </div>
-                    <div class="error-message" id="discord-error">Bukti join Discord harus diupload</div>
-                </div>
 
-                <!-- Bukti Join Bevy -->
-                <div class="form-group">
-                    <label for="bv" class="form-label">
-                        Upload Bukti Join Bevy (Gambar)<span class="required">*</span>
-                    </label>
-                    <p class="form-help-text">
-                        <a href="https://gdg.community.dev/gdg-on-campus-universitas-pasundan-bandung-indonesia/" target="_blank" rel="noopener noreferrer" class="form-link">
-                            Join Bevy GDGOC Unpas - Klik disini 👈🏻
-                        </a>
-                    </p>
-                    <div class="file-upload-wrapper">
-                        <label for="bv" class="form-file file-upload-label">
-                            <span class="file-upload-icon">
-                                <span class="material-symbols-outlined">image</span>
-                            </span>
-                            <div class="file-upload-text">
-                                <span class="file-upload-title">Pilih gambar bukti join Bevy</span>
-                                <span class="file-upload-subtitle" id="bv-filename">Format: JPG, PNG</span>
+                    <!-- Row 3: Fakultas & Prodi -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="fakultas" class="label-modern">
+                                Fakultas<span class="required">*</span>
+                            </label>
+                            <div class="select-modern" data-select="fakultas">
+                                <div class="select-trigger-modern">
+                                    <i data-lucide="building-2" class="select-icon-left"></i>
+                                    <span class="select-text">Pilih Fakultas</span>
+                                    <i data-lucide="chevron-down" class="select-arrow-icon"></i>
+                                </div>
+                                <div class="select-menu">
+                                    <div class="select-item" data-value="">Pilih Fakultas</div>
+                                    <div class="select-item" data-value="Fakultas Teknik">Fakultas Teknik</div>
+                                    <div class="select-item" data-value="Fakultas Ekonomi dan Bisnis">Fakultas Ekonomi dan Bisnis</div>
+                                    <div class="select-item" data-value="Fakultas Hukum">Fakultas Hukum</div>
+                                    <div class="select-item" data-value="Fakultas Keguruan dan Ilmu Pendidikan">Fakultas Keguruan dan Ilmu Pendidikan</div>
+                                    <div class="select-item" data-value="Fakultas Ilmu Sosial dan Ilmu Politik">Fakultas Ilmu Sosial dan Ilmu Politik</div>
+                                    <div class="select-item" data-value="Fakultas Kedokteran">Fakultas Kedokteran</div>
+                                    <div class="select-item" data-value="Fakultas Ilmu Seni dan Sastra">Fakultas Ilmu Seni dan Sastra</div>
+                                </div>
                             </div>
-                        </label>
-                        <input type="file"
-                               id="bv"
-                               name="bv"
-                               class="file-input-hidden"
-                               accept="image/*"
-                               required>
+                            <input type="hidden" id="fakultas" name="fakultas" required>
+                            <span class="error-msg" id="fakultas-error">Fakultas harus dipilih</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="prodi" class="label-modern">
+                                Program Studi<span class="required">*</span>
+                            </label>
+                            <div class="select-modern disabled" data-select="prodi">
+                                <div class="select-trigger-modern">
+                                    <i data-lucide="graduation-cap" class="select-icon-left"></i>
+                                    <span class="select-text">Pilih Fakultas terlebih dahulu</span>
+                                    <i data-lucide="chevron-down" class="select-arrow-icon"></i>
+                                </div>
+                                <div class="select-menu">
+                                    <div class="select-item" data-value="">Pilih Fakultas terlebih dahulu</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="prodi" name="prodi" required>
+                            <span class="error-msg" id="prodi-error">Program Studi harus dipilih</span>
+                        </div>
                     </div>
-                    <div class="error-message" id="bv-error">Bukti join Bevy harus diupload</div>
-                </div>
 
-                <!-- Nomor WhatsApp -->
-                <div class="form-group">
-                    <label for="whatsapp" class="form-label">
-                        Nomor WhatsApp<span class="required">*</span>
-                    </label>
-                    <input type="tel"
-                           id="whatsapp"
-                           name="whatsapp"
-                           class="form-input"
-                           placeholder="08123456789"
-                           pattern="[0-9]{10,13}"
-                           required>
-                    <div class="error-message" id="whatsapp-error">Nomor WhatsApp harus diisi dengan format yang benar (10-13 digit)</div>
-                </div>
+                    <!-- Departemen Section -->
+                    <div class="department-wrapper">
+                        <div class="department-title-row">
+                            <h3 class="department-title">Pilih Departemen (Maksimal 2)</h3>
+                            <div class="selection-counter">
+                                <span class="counter-number">0</span>
+                                <span class="counter-divider">/</span>
+                                <span class="counter-max">2</span>
+                            </div>
+                        </div>
+                        <p class="department-subtitle">Pilih 1-2 departemen yang sesuai dengan minat dan keahlianmu</p>
 
-                <!-- Submit Button -->
-                <button type="submit" class="submit-button">
-                    <span class="spinner"></span>
-                    <span class="button-text">Daftar Sekarang</span>
-                </button>
-            </form>
+                        <div class="department-container">
+                            <div class="dept-card" data-dept="HUMAN RESOURCE">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">👥</div>
+                                <h4 class="dept-name">Human Resource</h4>
+                                <p class="dept-desc">Manajemen SDM & Rekrutmen</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="MEDIA CREATIVE">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">🎨</div>
+                                <h4 class="dept-name">Media Creative</h4>
+                                <p class="dept-desc">Desain & Konten Kreatif</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="EVENT">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">📅</div>
+                                <h4 class="dept-name">Event</h4>
+                                <p class="dept-desc">Perencanaan & Pelaksanaan Acara</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="PUBLIC RELATIONSHIP">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">📢</div>
+                                <h4 class="dept-name">Public Relationship</h4>
+                                <p class="dept-desc">Komunikasi & Partnership</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="Curriculum Web">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">🌐</div>
+                                <h4 class="dept-name">Curriculum Web</h4>
+                                <p class="dept-desc">Web Development & Frontend</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="Curriculum IoT">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">🔌</div>
+                                <h4 class="dept-name">Curriculum IoT</h4>
+                                <p class="dept-desc">Internet of Things & Hardware</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="Curriculum ML">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">🤖</div>
+                                <h4 class="dept-name">Curriculum ML</h4>
+                                <p class="dept-desc">Machine Learning & AI</p>
+                            </div>
+
+                            <div class="dept-card" data-dept="Curriculum Game">
+                                <div class="rainbow-border"></div>
+                                <div class="dept-check-badge">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <div class="dept-icon">🎮</div>
+                                <h4 class="dept-name">Curriculum Game</h4>
+                                <p class="dept-desc">Game Development & Design</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="department" name="department" required>
+                        <span class="error-msg" id="department-error">Minimal 1 departemen harus dipilih</span>
+                    </div>
+
+                    <!-- Alasan -->
+                    <div class="input-group full-width">
+                        <label for="reason" class="label-modern">
+                            Alasan Memilih Departemen<span class="required">*</span>
+                        </label>
+                        <textarea id="reason"
+                                  name="reason"
+                                  class="textarea-modern"
+                                  rows="4"
+                                  placeholder="Jelaskan alasan Anda memilih departemen tersebut..."
+                                  required></textarea>
+                        <span class="error-msg" id="reason-error">Alasan harus diisi</span>
+                    </div>
+
+                    <!-- Row 4: CV & Portfolio -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="cv" class="label-modern">
+                                Upload CV (PDF)<span class="required">*</span>
+                            </label>
+                            <div class="file-upload-box">
+                                <input type="file"
+                                       id="cv"
+                                       name="cv"
+                                       class="file-hidden"
+                                       accept=".pdf"
+                                       required>
+                                <div class="file-display">
+                                    <i data-lucide="upload" class="file-icon"></i>
+                                    <div class="file-info">
+                                        <span class="file-label">Pilih file PDF</span>
+                                        <span class="file-hint">Max 5MB</span>
+                                    </div>
+                                </div>
+                                <div class="file-preview" id="cv-preview"></div>
+                            </div>
+                            <span class="error-msg" id="cv-error">CV harus diupload (format PDF)</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="portofolio" class="label-modern">
+                                Upload Portofolio (PDF)<span class="optional">(Opsional)</span>
+                            </label>
+                            <div class="file-upload-box">
+                                <input type="file"
+                                       id="portofolio"
+                                       name="portofolio"
+                                       class="file-hidden"
+                                       accept=".pdf">
+                                <div class="file-display">
+                                    <i data-lucide="file-text" class="file-icon"></i>
+                                    <div class="file-info">
+                                        <span class="file-label">Pilih file PDF (opsional)</span>
+                                        <span class="file-hint">Max 5MB</span>
+                                    </div>
+                                </div>
+                                <div class="file-preview" id="portofolio-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Instagram & Discord -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="instagram" class="label-modern">
+                                Bukti Follow IG<span class="required">*</span>
+                            </label>
+                            <p class="help-text">
+                                <a href="https://www.instagram.com/gdgoc.unpas/"
+                                   target="_blank"
+                                   rel="noopener"
+                                   class="link-modern">
+                                    @gdgoc.unpas
+                                </a>
+                            </p>
+                            <div class="file-upload-box">
+                                <input type="file"
+                                       id="instagram"
+                                       name="instagram"
+                                       class="file-hidden"
+                                       accept="image/*"
+                                       required>
+                                <div class="file-display">
+                                    <i data-lucide="image" class="file-icon"></i>
+                                    <div class="file-info">
+                                        <span class="file-label">Pilih gambar</span>
+                                        <span class="file-hint">JPG, PNG</span>
+                                    </div>
+                                </div>
+                                <div class="file-preview" id="instagram-preview"></div>
+                            </div>
+                            <span class="error-msg" id="instagram-error">Wajib upload</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="discord" class="label-modern">
+                                Bukti Join Discord<span class="required">*</span>
+                            </label>
+                            <p class="help-text">
+                                <a href="https://discord.gg/unpas"
+                                   target="_blank"
+                                   rel="noopener"
+                                   class="link-modern">
+                                    Discord UNPAS
+                                </a>
+                            </p>
+                            <div class="file-upload-box">
+                                <input type="file"
+                                       id="discord"
+                                       name="discord"
+                                       class="file-hidden"
+                                       accept="image/*"
+                                       required>
+                                <div class="file-display">
+                                    <i data-lucide="image" class="file-icon"></i>
+                                    <div class="file-info">
+                                        <span class="file-label">Pilih gambar</span>
+                                        <span class="file-hint">JPG, PNG</span>
+                                    </div>
+                                </div>
+                                <div class="file-preview" id="discord-preview"></div>
+                            </div>
+                            <span class="error-msg" id="discord-error">Wajib upload</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Bevy -->
+                    <div class="form-row single-center">
+                        <div class="input-group">
+                            <label for="bv" class="label-modern">
+                                Bukti Join Bevy<span class="required">*</span>
+                            </label>
+                            <p class="help-text">
+                                <a href="https://gdg.community.dev/gdg-on-campus-universitas-pasundan-bandung-indonesia/"
+                                   target="_blank"
+                                   rel="noopener"
+                                   class="link-modern">
+                                    Bevy GDGOC
+                                </a>
+                            </p>
+                            <div class="file-upload-box">
+                                <input type="file"
+                                       id="bv"
+                                       name="bv"
+                                       class="file-hidden"
+                                       accept="image/*"
+                                       required>
+                                <div class="file-display">
+                                    <i data-lucide="image" class="file-icon"></i>
+                                    <div class="file-info">
+                                        <span class="file-label">Pilih gambar</span>
+                                        <span class="file-hint">JPG, PNG</span>
+                                    </div>
+                                </div>
+                                <div class="file-preview" id="bv-preview"></div>
+                            </div>
+                            <span class="error-msg" id="bv-error">Wajib upload</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="submit-wrapper">
+                        <button type="submit" class="btn-submit">
+                            <span class="btn-text">Daftar Sekarang</span>
+                            <i data-lucide="arrow-right" class="btn-icon"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Video Tutorial Section (Desktop) -->
+            <div class="video-section desktop-only" id="video-section-desktop">
+                <!-- Videos will be injected here -->
+            </div>
         </div>
-
-        <!-- Video Tutorial Section (Desktop) -->
-        <div class="video-section desktop-only" id="video-section-desktop">
-            <!-- Videos will be injected here -->
-        </div>
-    </div>
     </main>
 
     <!-- Video Modal (Mobile) -->
@@ -355,19 +456,37 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 class="loading-title">Mengirim Data...</h3>
+            <p class="loading-text">Mohon tunggu, sedang memproses pendaftaran Anda</p>
+            <div class="loading-warning">
+                ⚠️ Proses ini membutuhkan waktu beberapa saat. Harap jangan tutup atau refresh halaman ini.
+            </div>
+        </div>
+    </div>
+
     <!-- Success Popup -->
-    <div class="success-popup" id="success-popup" role="dialog" aria-modal="true" aria-labelledby="success-title">
-        <div class="success-content">
-            <div class="success-icon" aria-hidden="true">✅</div>
-            <h2 class="success-title" id="success-title">Pendaftaran Berhasil!</h2>
-            <p class="success-message">Terima kasih telah mendaftar. Kami akan menghubungi Anda segera.</p>
-            <button class="close-button" onclick="closeSuccessPopup()">Tutup</button>
+    <div class="success-overlay" id="success-popup">
+        <div class="success-box">
+            <div class="success-checkmark">✅</div>
+            <h2 class="success-heading">Pendaftaran Berhasil!</h2>
+            <p class="success-text">
+                Terima kasih telah mendaftar. Kami akan menghubungi Anda segera.
+            </p>
+            <button class="btn-close" onclick="closeSuccessPopup()">Tutup</button>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        © 2025 Google Developer Groups on Campus - Universitas Pasundan
+    <footer class="footer-modern">
+        <p>© 2025 Google Developer Groups on Campus - Universitas Pasundan</p>
     </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

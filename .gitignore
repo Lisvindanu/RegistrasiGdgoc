@@ -19,3 +19,6 @@ npm-debug.log*
 
 # Dependencies
 node_modules/
+
+# Zip files
+*.zip
