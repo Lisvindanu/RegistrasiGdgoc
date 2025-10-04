@@ -12,6 +12,9 @@
     <!-- External Stylesheets -->
     <link rel="stylesheet" href="assets/css/styles.css">
 
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
@@ -173,28 +176,50 @@
 
                 <!-- CV Upload -->
                 <div class="form-group">
-                    <label for="cv" class="form-label">
+                    <label class="form-label">
                         Upload CV (PDF, Max 2MB)<span class="required">*</span>
                     </label>
-                    <input type="file"
-                           id="cv"
-                           name="cv"
-                           class="form-file"
-                           accept=".pdf"
-                           required>
+                    <div class="file-upload-wrapper">
+                        <label for="cv" class="form-file file-upload-label">
+                            <span class="file-upload-icon">
+                                <span class="material-symbols-outlined">description</span>
+                            </span>
+                            <div class="file-upload-text">
+                                <span class="file-upload-title">Pilih file PDF</span>
+                                <span class="file-upload-subtitle" id="cv-filename">Maksimal 2MB</span>
+                            </div>
+                        </label>
+                        <input type="file"
+                               id="cv"
+                               name="cv"
+                               class="file-input-hidden"
+                               accept=".pdf"
+                               required>
+                    </div>
                     <div class="error-message" id="cv-error">CV harus diupload (format PDF)</div>
                 </div>
 
                 <!-- Portofolio Upload (Optional) -->
                 <div class="form-group">
-                    <label for="portofolio" class="form-label">
+                    <label class="form-label">
                         Upload Portofolio (PDF, Max 2MB)<span class="optional">(Opsional)</span>
                     </label>
-                    <input type="file"
-                           id="portofolio"
-                           name="portofolio"
-                           class="form-file"
-                           accept=".pdf">
+                    <div class="file-upload-wrapper">
+                        <label for="portofolio" class="form-file file-upload-label">
+                            <span class="file-upload-icon">
+                                <span class="material-symbols-outlined">folder_open</span>
+                            </span>
+                            <div class="file-upload-text">
+                                <span class="file-upload-title">Pilih file PDF (opsional)</span>
+                                <span class="file-upload-subtitle" id="portofolio-filename">Maksimal 2MB</span>
+                            </div>
+                        </label>
+                        <input type="file"
+                               id="portofolio"
+                               name="portofolio"
+                               class="file-input-hidden"
+                               accept=".pdf">
+                    </div>
                     <div class="error-message" id="portofolio-error">Ukuran portofolio maksimal 2MB</div>
                 </div>
 
@@ -208,12 +233,23 @@
                             Follow Instagram kami - Klik disini 👈🏻
                         </a>
                     </p>
-                    <input type="file"
-                           id="instagram"
-                           name="instagram"
-                           class="form-file"
-                           accept="image/*"
-                           required>
+                    <div class="file-upload-wrapper">
+                        <label for="instagram" class="form-file file-upload-label">
+                            <span class="file-upload-icon">
+                                <span class="material-symbols-outlined">image</span>
+                            </span>
+                            <div class="file-upload-text">
+                                <span class="file-upload-title">Pilih gambar bukti follow</span>
+                                <span class="file-upload-subtitle" id="instagram-filename">Format: JPG, PNG</span>
+                            </div>
+                        </label>
+                        <input type="file"
+                               id="instagram"
+                               name="instagram"
+                               class="file-input-hidden"
+                               accept="image/*"
+                               required>
+                    </div>
                     <div class="error-message" id="instagram-error">Bukti follow Instagram harus diupload</div>
                 </div>
 
@@ -227,12 +263,23 @@
                             Join Discord UNPAS - Klik disini 👈🏻
                         </a>
                     </p>
-                    <input type="file"
-                           id="discord"
-                           name="discord"
-                           class="form-file"
-                           accept="image/*"
-                           required>
+                    <div class="file-upload-wrapper">
+                        <label for="discord" class="form-file file-upload-label">
+                            <span class="file-upload-icon">
+                                <span class="material-symbols-outlined">image</span>
+                            </span>
+                            <div class="file-upload-text">
+                                <span class="file-upload-title">Pilih gambar bukti join Discord</span>
+                                <span class="file-upload-subtitle" id="discord-filename">Format: JPG, PNG</span>
+                            </div>
+                        </label>
+                        <input type="file"
+                               id="discord"
+                               name="discord"
+                               class="file-input-hidden"
+                               accept="image/*"
+                               required>
+                    </div>
                     <div class="error-message" id="discord-error">Bukti join Discord harus diupload</div>
                 </div>
 
@@ -246,12 +293,23 @@
                             Join Bevy GDGOC Unpas - Klik disini 👈🏻
                         </a>
                     </p>
-                    <input type="file"
-                           id="bv"
-                           name="bv"
-                           class="form-file"
-                           accept="image/*"
-                           required>
+                    <div class="file-upload-wrapper">
+                        <label for="bv" class="form-file file-upload-label">
+                            <span class="file-upload-icon">
+                                <span class="material-symbols-outlined">image</span>
+                            </span>
+                            <div class="file-upload-text">
+                                <span class="file-upload-title">Pilih gambar bukti join Bevy</span>
+                                <span class="file-upload-subtitle" id="bv-filename">Format: JPG, PNG</span>
+                            </div>
+                        </label>
+                        <input type="file"
+                               id="bv"
+                               name="bv"
+                               class="file-input-hidden"
+                               accept="image/*"
+                               required>
+                    </div>
                     <div class="error-message" id="bv-error">Bukti join Bevy harus diupload</div>
                 </div>
 
@@ -272,7 +330,8 @@
 
                 <!-- Submit Button -->
                 <button type="submit" class="submit-button">
-                    Daftar Sekarang
+                    <span class="spinner"></span>
+                    <span class="button-text">Daftar Sekarang</span>
                 </button>
             </form>
         </div>

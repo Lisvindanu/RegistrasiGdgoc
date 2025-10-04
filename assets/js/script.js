@@ -302,9 +302,10 @@ class RegistrationForm {
             return;
         }
 
-        // Disable submit button
+        // Show loading state
         this.submitButton.disabled = true;
-        this.submitButton.textContent = 'Mengirim...';
+        this.submitButton.classList.add('loading');
+        this.submitButton.querySelector('.button-text').textContent = 'Mengirim data...';
 
         try {
             // Get form data
@@ -330,9 +331,10 @@ class RegistrationForm {
             console.error('Error:', error);
             alert('Terjadi kesalahan saat mengirim data: ' + error.message);
         } finally {
-            // Re-enable submit button
+            // Reset button state
             this.submitButton.disabled = false;
-            this.submitButton.textContent = 'Daftar Sekarang';
+            this.submitButton.classList.remove('loading');
+            this.submitButton.querySelector('.button-text').textContent = 'Daftar Sekarang';
         }
     }
 
@@ -719,6 +721,27 @@ class VideoManager {
     }
 }
 
+// File Upload Preview Handler
+function initFileUploads() {
+    const fileInputs = ['cv', 'portofolio', 'instagram', 'discord', 'bv'];
+
+    fileInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        const filenameSpan = document.getElementById(`${inputId}-filename`);
+
+        if (input && filenameSpan) {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    filenameSpan.textContent = file.name;
+                    filenameSpan.style.color = '#4285f4';
+                    filenameSpan.style.fontWeight = '500';
+                }
+            });
+        }
+    });
+}
+
 // Initialize everything when DOM is ready
 let departmentSelector;
 let prodiSelector;
@@ -736,6 +759,9 @@ document.addEventListener('DOMContentLoaded', () => {
     registrationForm = new RegistrationForm();
     successPopup = new SuccessPopup();
     videoManager = new VideoManager();
+
+    // Initialize file uploads
+    initFileUploads();
 
     console.log('GDGOC Registration Form initialized successfully!');
 });
