@@ -539,7 +539,7 @@ class FormHandler {
     this.validator = new FormValidator();
     this.btn = document.querySelector(".btn-submit");
     this.scriptURL =
-      "https://script.google.com/macros/s/AKfycbwKta8DMawsQY7LPPjoQbzGtxAiGuOmVyE8u7HBiqv6L2wnus60BbaNNZNyQQoYocZl/exec";
+      "https://script.google.com/macros/s/AKfycby_54E2zDtz3KTKIiFwkFLgn3oxO7y3jZ39JAL0DwtkJWNMd6H0EvmqqFpiqJpi3opo/exec";
     this.init();
   }
 
