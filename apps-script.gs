@@ -28,7 +28,7 @@ function doPost(e) {
     Logger.log('payload length: ' + (payload ? payload.length : 0));
 
     const data = JSON.parse(payload);
-    Logger.log('Parsed data: ' + JSON.stringify({nama: data.nama, npm: data.npm}));
+    Logger.log('Parsed data: ' + JSON.stringify({nama: data.nama, npm: data.npm, email: data.email}));
 
     // Buka spreadsheet
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -41,9 +41,11 @@ function doPost(e) {
         'Timestamp',
         'Nama Lengkap',
         'NPM',
+        'Email',
         'Fakultas',
         'Program Studi',
-        'Departemen',
+        'Departemen 1',
+        'Departemen 2',
         'Alasan',
         'Nomor WhatsApp',
         'CV Link',
@@ -55,7 +57,7 @@ function doPost(e) {
       ]);
 
       // Format header
-      const headerRange = sheet.getRange(1, 1, 1, 14);
+      const headerRange = sheet.getRange(1, 1, 1, 16);
       headerRange.setBackground('#4285f4');
       headerRange.setFontColor('#ffffff');
       headerRange.setFontWeight('bold');
@@ -78,15 +80,22 @@ function doPost(e) {
     const bevyLink = data.bv ? uploadFileToDrive(data.bv, data.nama, 'Bevy') : '';
     Logger.log('Bevy uploaded: ' + bevyLink);
 
+    // Split departments (max 2)
+    const departments = data.department ? data.department.split(',').map(d => d.trim()) : [];
+    const dept1 = departments[0] || '';
+    const dept2 = departments[1] || 'Tidak Memilih';
+
     // Tambah data ke sheet
     Logger.log('Adding row to sheet...');
     const rowData = [
       new Date(),
       data.nama,
       data.npm,
+      data.email,
       data.fakultas,
       data.prodi,
-      data.department,
+      dept1,
+      dept2,
       data.reason,
       data.whatsapp,
       cvLink,
@@ -102,7 +111,7 @@ function doPost(e) {
     Logger.log('Row added successfully');
 
     // Auto-resize columns
-    sheet.autoResizeColumns(1, 14);
+    sheet.autoResizeColumns(1, 16);
     Logger.log('Columns resized');
 
     // Send email notification (optional)
@@ -202,6 +211,7 @@ function sendEmailNotification(data) {
 
       Nama: ${data.nama}
       NPM: ${data.npm}
+      Email: ${data.email}
       Fakultas: ${data.fakultas}
       Program Studi: ${data.prodi}
       Departemen: ${data.department}
@@ -349,9 +359,11 @@ function resetSheetWithCorrectHeader() {
       'Timestamp',
       'Nama Lengkap',
       'NPM',
+      'Email',
       'Fakultas',
       'Program Studi',
-      'Departemen',
+      'Departemen 1',
+      'Departemen 2',
       'Alasan',
       'Nomor WhatsApp',
       'CV Link',
@@ -363,16 +375,16 @@ function resetSheetWithCorrectHeader() {
     ]);
 
     // Format header
-    const headerRange = sheet.getRange(1, 1, 1, 14);
+    const headerRange = sheet.getRange(1, 1, 1, 16);
     headerRange.setBackground('#4285f4');
     headerRange.setFontColor('#ffffff');
     headerRange.setFontWeight('bold');
 
     // Auto resize columns
-    sheet.autoResizeColumns(1, 14);
+    sheet.autoResizeColumns(1, 16);
 
     Logger.log('Sheet berhasil direset dengan header yang benar!');
-    return 'Success! Sheet berhasil direset dengan header yang benar.';
+    return 'Success! Sheet berhasil direset dengan header yang benar (Departemen 1 & 2 terpisah).';
 
   } catch (error) {
     Logger.log('Error: ' + error.toString());

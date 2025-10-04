@@ -1,3 +1,19 @@
+// Video Configuration
+const videoConfig = [
+    {
+        id: 'tutorial-1',
+        title: 'Tutorial Pendaftaran',
+        embedUrl: 'https://www.youtube.com/embed/o_3FTej1430',
+        description: 'Panduan lengkap cara mendaftar GDGOC'
+    },
+    {
+        id: 'tutorial-2',
+        title: 'Video Tutorial 2',
+        embedUrl: 'https://www.youtube.com/embed/e6WiLS3V8Rs',
+        description: 'Tutorial tambahan untuk pendaftaran'
+    }
+];
+
 // Initialize Particles.js with Google-themed colors
 function initParticles() {
     particlesJS('particles-js', {
@@ -137,6 +153,16 @@ class FormValidator {
             isValid = false;
         }
 
+        // Email
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+            this.showError('email-error');
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            this.showError('email-error', 'Format email tidak valid');
+            isValid = false;
+        }
+
         // Fakultas
         const fakultas = document.getElementById('fakultas').value;
         if (!fakultas) {
@@ -166,11 +192,22 @@ class FormValidator {
 
         // CV
         const cv = document.getElementById('cv').files[0];
+        const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
         if (!cv) {
             this.showError('cv-error');
             isValid = false;
         } else if (cv.type !== 'application/pdf') {
             this.showError('cv-error', 'CV harus berformat PDF');
+            isValid = false;
+        } else if (cv.size > maxFileSize) {
+            this.showError('cv-error', 'Ukuran CV maksimal 2MB');
+            isValid = false;
+        }
+
+        // Portofolio (optional, but check size if uploaded)
+        const portofolio = document.getElementById('portofolio').files[0];
+        if (portofolio && portofolio.size > maxFileSize) {
+            this.showError('portofolio-error', 'Ukuran portofolio maksimal 2MB');
             isValid = false;
         }
 
@@ -249,7 +286,7 @@ class RegistrationForm {
         this.validator = new FormValidator(this.form);
         this.submitButton = document.querySelector('.submit-button');
         // URL Google Apps Script Web App
-        this.scriptURL = 'https://script.google.com/macros/s/AKfycby2RbKwWav_o3k1ik-A6DR-IdglUy6LxFaX_TqY25I6f6ACnJq88bMqRteBmy50Jsp2/exec';
+        this.scriptURL = 'https://script.google.com/macros/s/AKfycby3jz_zK8iqQlK-PvcWA9JCJCxa-Dh9jQpkuGX62f-w3GAU40o0U8ulgIDypuTxeK8u/exec';
         this.init();
     }
 
@@ -363,6 +400,7 @@ class RegistrationForm {
         const data = {
             nama: document.getElementById('nama').value.trim(),
             npm: document.getElementById('npm').value.trim(),
+            email: document.getElementById('email').value.trim(),
             fakultas: document.getElementById('fakultas').value,
             prodi: document.getElementById('prodi').value.trim(),
             department: departmentSelector.getSelected(),
@@ -535,11 +573,158 @@ class ProdiSelector {
     }
 }
 
+// Video Manager - Handles both desktop dropdown and mobile modal
+class VideoManager {
+    constructor() {
+        this.desktopSection = document.getElementById('video-section-desktop');
+        this.modal = document.getElementById('video-modal');
+        this.modalBody = document.getElementById('video-modal-body');
+        this.modalClose = document.getElementById('video-modal-close');
+        this.navbarBtn = document.getElementById('navbar-video-btn');
+        this.currentPlayer = null;
+        this.init();
+    }
+
+    init() {
+        // Render videos from config
+        this.renderDesktopVideos();
+        this.renderModalVideos();
+
+        // Modal handlers
+        if (this.modalClose) {
+            this.modalClose.addEventListener('click', () => this.closeModal());
+        }
+
+        if (this.modal) {
+            this.modal.querySelector('.video-modal-overlay')?.addEventListener('click', () => this.closeModal());
+        }
+
+        // Navbar button - mobile only
+        if (this.navbarBtn) {
+            this.navbarBtn.addEventListener('click', () => this.openModal());
+        }
+    }
+
+    renderDesktopVideos() {
+        if (!this.desktopSection || !videoConfig) return;
+
+        videoConfig.forEach((video) => {
+            const videoHTML = `
+                <div class="video-toggle" id="video-toggle-${video.id}">
+                    <div class="video-toggle-header">
+                        <span class="video-toggle-title">📺 ${video.title}</span>
+                        <span class="video-toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="video-dropdown" id="video-dropdown-${video.id}">
+                    <div class="video-container">
+                        <iframe src="${video.embedUrl}"
+                                title="${video.title}"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen></iframe>
+                    </div>
+                </div>
+            `;
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = videoHTML;
+            this.desktopSection.appendChild(wrapper);
+
+            // Add toggle handler
+            const toggle = document.getElementById(`video-toggle-${video.id}`);
+            const dropdown = document.getElementById(`video-dropdown-${video.id}`);
+
+            if (toggle && dropdown) {
+                toggle.addEventListener('click', () => {
+                    toggle.classList.toggle('active');
+                    dropdown.classList.toggle('active');
+                });
+            }
+        });
+    }
+
+    renderModalVideos() {
+        if (!this.modalBody || !videoConfig) return;
+
+        videoConfig.forEach(video => {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.innerHTML = `
+                <div class="video-item-title">
+                    📺 ${video.title}
+                </div>
+                <div class="video-item-description">${video.description}</div>
+                <div class="video-player" id="player-${video.id}">
+                    <div class="video-container">
+                        <iframe src="${video.embedUrl}"
+                                title="${video.title}"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen></iframe>
+                    </div>
+                </div>
+            `;
+
+            videoItem.addEventListener('click', (e) => {
+                if (!e.target.closest('.video-player')) {
+                    this.togglePlayer(video.id);
+                }
+            });
+
+            this.modalBody.appendChild(videoItem);
+        });
+    }
+
+    togglePlayer(videoId) {
+        const player = document.getElementById(`player-${videoId}`);
+        if (!player) return;
+
+        // Close current player if different
+        if (this.currentPlayer && this.currentPlayer !== player) {
+            this.currentPlayer.classList.remove('active');
+        }
+
+        player.classList.toggle('active');
+        this.currentPlayer = player.classList.contains('active') ? player : null;
+
+        // Smooth scroll to player
+        if (this.currentPlayer) {
+            setTimeout(() => {
+                player.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }
+
+    openModal() {
+        if (this.modal) {
+            this.modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    closeModal() {
+        if (this.modal) {
+            this.modal.classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Close all players
+            if (this.currentPlayer) {
+                this.currentPlayer.classList.remove('active');
+                this.currentPlayer = null;
+            }
+        }
+    }
+}
+
 // Initialize everything when DOM is ready
 let departmentSelector;
 let prodiSelector;
 let registrationForm;
 let successPopup;
+let videoManager;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize particles
@@ -550,6 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
     prodiSelector = new ProdiSelector();
     registrationForm = new RegistrationForm();
     successPopup = new SuccessPopup();
+    videoManager = new VideoManager();
 
     console.log('GDGOC Registration Form initialized successfully!');
 });
