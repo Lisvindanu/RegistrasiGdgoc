@@ -63,22 +63,20 @@ function doPost(e) {
       headerRange.setFontWeight('bold');
     }
 
-    // Handle file uploads ke Google Drive
+    // Handle file uploads ke Google Drive - OPTIMIZED
     Logger.log('Starting file uploads...');
-    const cvLink = data.cv ? uploadFileToDrive(data.cv, data.nama, 'CV') : '';
-    Logger.log('CV uploaded: ' + cvLink);
 
-    const portofolioLink = data.portofolio ? uploadFileToDrive(data.portofolio, data.nama, 'Portofolio') : '';
-    Logger.log('Portofolio uploaded: ' + portofolioLink);
+    // Pre-create folder structure once (avoid repeated folder lookups)
+    const folders = prepareFolderStructure(data.nama);
 
-    const instagramLink = data.instagram ? uploadFileToDrive(data.instagram, data.nama, 'Instagram') : '';
-    Logger.log('Instagram uploaded: ' + instagramLink);
+    // Upload all files using the same folder reference
+    const cvLink = data.cv ? uploadFileOptimized(data.cv, data.nama, 'CV', folders) : '';
+    const portofolioLink = data.portofolio ? uploadFileOptimized(data.portofolio, data.nama, 'Portofolio', folders) : '';
+    const instagramLink = data.instagram ? uploadFileOptimized(data.instagram, data.nama, 'Instagram', folders) : '';
+    const discordLink = data.discord ? uploadFileOptimized(data.discord, data.nama, 'Discord', folders) : '';
+    const bevyLink = data.bv ? uploadFileOptimized(data.bv, data.nama, 'Bevy', folders) : '';
 
-    const discordLink = data.discord ? uploadFileToDrive(data.discord, data.nama, 'Discord') : '';
-    Logger.log('Discord uploaded: ' + discordLink);
-
-    const bevyLink = data.bv ? uploadFileToDrive(data.bv, data.nama, 'Bevy') : '';
-    Logger.log('Bevy uploaded: ' + bevyLink);
+    Logger.log('All files uploaded successfully');
 
     // Split departments (max 2)
     const departments = data.department ? data.department.split(',').map(d => d.trim()) : [];
@@ -153,16 +151,9 @@ function doGet(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// Fungsi untuk upload file ke Google Drive
-function uploadFileToDrive(fileData, nama, fileType) {
+// Fungsi untuk prepare folder structure (dipanggil sekali saja)
+function prepareFolderStructure(nama) {
   try {
-    // Decode base64 file
-    const blob = Utilities.newBlob(
-      Utilities.base64Decode(fileData.data),
-      fileData.mimeType,
-      fileData.name
-    );
-
     // Buat folder GDGOC kalau belum ada
     const parentFolder = DriveApp.getRootFolder();
     let gdgocFolder;
@@ -184,9 +175,29 @@ function uploadFileToDrive(fileData, nama, fileType) {
       pesertaFolder = gdgocFolder.createFolder(nama);
     }
 
-    // Upload file dengan nama yang jelas
+    return {
+      gdgocFolder: gdgocFolder,
+      pesertaFolder: pesertaFolder
+    };
+  } catch (error) {
+    Logger.log('Error preparing folders: ' + error.toString());
+    return null;
+  }
+}
+
+// Fungsi upload file yang sudah dioptimasi (tanpa folder lookup berulang)
+function uploadFileOptimized(fileData, nama, fileType, folders) {
+  try {
+    // Decode base64 file
+    const blob = Utilities.newBlob(
+      Utilities.base64Decode(fileData.data),
+      fileData.mimeType,
+      fileData.name
+    );
+
+    // Upload file dengan nama yang jelas (gunakan timestamp yang sama untuk batch)
     const fileName = `${fileType}_${nama}_${new Date().getTime()}`;
-    const file = pesertaFolder.createFile(blob.setName(fileName));
+    const file = folders.pesertaFolder.createFile(blob.setName(fileName));
 
     // Set file sharing ke anyone with link
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);

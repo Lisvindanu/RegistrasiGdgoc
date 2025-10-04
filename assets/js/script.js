@@ -539,7 +539,7 @@ class FormHandler {
     this.validator = new FormValidator();
     this.btn = document.querySelector(".btn-submit");
     this.scriptURL =
-      "https://script.google.com/macros/s/AKfycby_54E2zDtz3KTKIiFwkFLgn3oxO7y3jZ39JAL0DwtkJWNMd6H0EvmqqFpiqJpi3opo/exec";
+      "https://script.google.com/macros/s/AKfycbwjlBobeHpTGDwxRqgg0rG4VU54QqgT2FZT8DFQequrPV7bo--dWFBjtGM26j291WtL/exec";
     this.init();
   }
 
@@ -610,6 +610,15 @@ class FormHandler {
     const dc = document.getElementById("discord").files[0];
     const bv = document.getElementById("bv").files[0];
 
+    // Parallel base64 encoding for better performance
+    const [cvData, portoData, igData, dcData, bvData] = await Promise.all([
+      this.toBase64(cv),
+      porto ? this.toBase64(porto) : Promise.resolve(null),
+      this.toBase64(ig),
+      this.toBase64(dc),
+      this.toBase64(bv)
+    ]);
+
     return {
       nama: document.getElementById("nama").value.trim(),
       npm: document.getElementById("npm").value.trim(),
@@ -619,11 +628,11 @@ class FormHandler {
       prodi: document.getElementById("prodi").value,
       department: deptManager.selected.join(", "),
       reason: document.getElementById("reason").value.trim(),
-      cv: await this.toBase64(cv),
-      portofolio: porto ? await this.toBase64(porto) : null,
-      instagram: await this.toBase64(ig),
-      discord: await this.toBase64(dc),
-      bv: await this.toBase64(bv),
+      cv: cvData,
+      portofolio: portoData,
+      instagram: igData,
+      discord: dcData,
+      bv: bvData,
     };
   }
 
