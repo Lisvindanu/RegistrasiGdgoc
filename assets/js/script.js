@@ -17,33 +17,39 @@ const videoConfig = [
 
 // Initialize Particles.js with Google colors
 function initParticles() {
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 60, density: { enable: true, value_area: 800 } },
-      color: { value: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"] },
-      shape: { type: "circle" },
-      opacity: { value: 0.4, random: true },
-      size: { value: 4, random: true },
-      line_linked: { enable: false },
-      move: {
-        enable: true,
-        speed: 2,
-        direction: "none",
-        random: false,
-        straight: false,
-        out_mode: "out",
-      },
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: true, mode: "push" },
-        resize: true,
-      },
-    },
-    retina_detect: true,
-  });
+  if (typeof particlesJS !== "undefined") {
+    try {
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 60, density: { enable: true, value_area: 800 } },
+          color: { value: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"] },
+          shape: { type: "circle" },
+          opacity: { value: 0.4, random: true },
+          size: { value: 4, random: true },
+          line_linked: { enable: false },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: "none",
+            random: false,
+            straight: false,
+            out_mode: "out",
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" },
+            resize: true,
+          },
+        },
+        retina_detect: true,
+      });
+    } catch (err) {
+      console.log("Particles error:", err);
+    }
+  }
 }
 
 // Data Program Studi per Fakultas
@@ -675,32 +681,46 @@ class FormHandler {
 
   showSuccess() {
     const popup = document.getElementById("success-popup");
+    if (!popup) return;
+
     popup.classList.add("active");
 
-    // First confetti burst
-    confetti({
-      particleCount: 200,
-      spread: 90,
-      origin: { y: 0.6 },
-      colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
-    });
+    // First confetti burst - with error handling
+    if (typeof confetti !== "undefined") {
+      try {
+        confetti({
+          particleCount: 200,
+          spread: 90,
+          origin: { y: 0.6 },
+          colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
+        });
 
-    // Second confetti burst
-    setTimeout(() => {
-      confetti({
-        particleCount: 100,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
-      });
-    }, 250);
+        // Second confetti burst
+        setTimeout(() => {
+          confetti({
+            particleCount: 100,
+            spread: 60,
+            origin: { y: 0.7 },
+            colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335"],
+          });
+        }, 250);
+      } catch (err) {
+        console.log("Confetti error:", err);
+      }
+    }
 
-    // GSAP animation for popup
-    gsap.fromTo(
-      ".success-box",
-      { scale: 0.8, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
-    );
+    // GSAP animation for popup - with error handling
+    if (typeof gsap !== "undefined") {
+      try {
+        gsap.fromTo(
+          ".success-box",
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+        );
+      } catch (err) {
+        console.log("GSAP error:", err);
+      }
+    }
 
     // Countdown and redirect to WhatsApp group
     const countdownEl = document.getElementById("redirect-countdown");
