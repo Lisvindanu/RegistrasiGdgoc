@@ -2,14 +2,15 @@
 const videoConfig = [
     {
         id: 'tutorial-1',
-        title: 'Tutorial Pendaftaran',
-        embedUrl: 'https://www.youtube.com/embed/o_3FTej1430',
+        title: 'Tutorial Masuk Bevy GDGOC UNPAS',
+        embedUrl: 'https://www.youtube.com/embed/4jDlzx3ZYN0',
         description: 'Panduan lengkap cara mendaftar GDGOC'
     },
+
     {
         id: 'tutorial-2',
-        title: 'Video Tutorial 2',
-        embedUrl: 'https://www.youtube.com/embed/e6WiLS3V8Rs',
+        title: 'Tutorial Masuk Discord GDGOC UNPAS',
+        embedUrl: 'https://www.youtube.com/embed/F8p77Ps2G_k',
         description: 'Tutorial tambahan untuk pendaftaran'
     }
 ];
