@@ -701,6 +701,24 @@ class FormHandler {
       { scale: 0.8, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
     );
+
+    // Countdown and redirect to WhatsApp group
+    const countdownEl = document.getElementById("redirect-countdown");
+    let countdown = 3;
+
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdownEl) {
+        countdownEl.textContent = countdown;
+      }
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+      }
+    }, 1000);
+
+    setTimeout(() => {
+      window.location.href = "https://chat.whatsapp.com/FZzHcntqTut64kUxaJIZ6I";
+    }, 3000);
   }
 
   reset() {
