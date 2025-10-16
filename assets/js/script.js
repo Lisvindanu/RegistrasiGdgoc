@@ -832,6 +832,28 @@ class VideoManager {
             container.insertAdjacentHTML('beforeend', videoHTML);
         });
 
+        // Add WhatsApp group info after videos
+        const whatsappInfoHTML = `
+            <div class="whatsapp-group-info">
+                <h3 class="wa-info-title">📱 Grup WhatsApp</h3>
+                <p class="wa-info-desc">Join grup WhatsApp untuk informasi open recruitment:</p>
+                <a href="https://chat.whatsapp.com/FZzHcntqTut64kUxaJIZ6I"
+                   target="_blank"
+                   rel="noopener"
+                   class="wa-group-btn wa-primary">
+                    Join Grup Utama
+                </a>
+                <p class="wa-backup-label">Jika grup utama penuh:</p>
+                <a href="https://chat.whatsapp.com/HvLgWizPNQRLDU0g0VSk79?mode=wwt"
+                   target="_blank"
+                   rel="noopener"
+                   class="wa-group-btn wa-secondary">
+                    Join Grup Backup
+                </a>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', whatsappInfoHTML);
+
         // Add toggle functionality
         container.querySelectorAll('.video-toggle').forEach((toggle) => {
             toggle.addEventListener('click', () => {
