@@ -136,10 +136,14 @@ class DepartmentManager {
 
     if (this.selected.length > 0) {
       this.counter.classList.add("active");
-      const errorEl = document.getElementById("department-error");
-      if (errorEl) errorEl.style.display = "none";
     } else {
       this.counter.classList.remove("active");
+    }
+
+    // Only hide error if exactly 2 departments are selected
+    const errorEl = document.getElementById("department-error");
+    if (errorEl && this.selected.length === 2) {
+      errorEl.style.display = "none";
     }
 
     this.cards.forEach((card) => {
@@ -485,9 +489,9 @@ class FormValidator {
       valid = false;
     }
 
-    // Department
-    if (!deptManager.selected.length) {
-      this.showError("department-error", "Minimal 1 departemen harus dipilih");
+    // Department - must select exactly 2
+    if (deptManager.selected.length !== 2) {
+      this.showError("department-error", "Wajib pilih 2 departemen");
       valid = false;
     }
 
