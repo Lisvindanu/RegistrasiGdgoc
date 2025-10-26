@@ -1314,6 +1314,150 @@ body {
   }
 }
 
+/* Registration Closed Modal */
+.registration-closed-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+
+.registration-closed-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.registration-closed-box {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+.registration-closed-overlay.active .registration-closed-box {
+  transform: scale(1);
+}
+
+.closed-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: lockShake 0.5s ease-in-out;
+}
+
+@keyframes lockShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.closed-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--google-red);
+  margin-bottom: 1rem;
+}
+
+.closed-text {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.closed-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.closed-social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-light);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s;
+  border: 2px solid var(--border-color);
+}
+
+.social-link:hover {
+  background: var(--google-blue);
+  color: white;
+  border-color: var(--google-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.social-icon {
+  font-size: 1.25rem;
+}
+
+.btn-close-modal {
+  padding: 1rem 3rem;
+  background: var(--google-blue);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.btn-close-modal:hover {
+  background: #3367d6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4);
+}
+
+/* Disabled State for Form */
+.form-container.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  user-select: none;
+  position: relative;
+}
+
+.form-container.disabled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  z-index: 10;
+}
+
 /* WhatsApp Group Info Section */
 .whatsapp-group-info {
   background: white;
@@ -1384,4 +1528,42 @@ body {
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(52, 168, 83, 0.4);
+}
+
+/* Responsive Styles for Registration Closed Modal */
+@media (max-width: 768px) {
+  .registration-closed-box {
+    padding: 2rem 1.5rem;
+  }
+
+  .closed-icon {
+    font-size: 3rem;
+  }
+
+  .closed-heading {
+    font-size: 1.5rem;
+  }
+
+  .closed-text {
+    font-size: 0.9rem;
+  }
+
+  .closed-description {
+    font-size: 0.85rem;
+  }
+
+  .closed-social-links {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-close-modal {
+    padding: 0.875rem 2rem;
+    font-size: 0.95rem;
+  }
 }

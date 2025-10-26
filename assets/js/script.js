@@ -877,13 +877,76 @@ function closeSuccessPopup() {
   popup.classList.remove("active");
 }
 
+// Close Registration Modal Function
+function closeRegistrationModal() {
+  const modal = document.getElementById("registration-closed-modal");
+  modal.classList.remove("active");
+}
+
+// Registration Status Manager
+class RegistrationStatusManager {
+  constructor() {
+    this.isRegistrationOpen = false; // Set to false to close registration
+    this.init();
+  }
+
+  init() {
+    if (!this.isRegistrationOpen) {
+      this.disableForm();
+      this.showClosedModal();
+    }
+  }
+
+  disableForm() {
+    // Disable form container
+    const formContainer = document.querySelector('.form-container');
+    if (formContainer) {
+      formContainer.classList.add('disabled');
+    }
+
+    // Disable all inputs
+    document.querySelectorAll('input, textarea, select, button').forEach(element => {
+      element.disabled = true;
+    });
+
+    // Disable department cards
+    document.querySelectorAll('.dept-card').forEach(card => {
+      card.style.pointerEvents = 'none';
+      card.style.opacity = '0.5';
+    });
+
+    // Disable custom selects
+    document.querySelectorAll('.select-modern').forEach(select => {
+      select.classList.add('disabled');
+      select.style.pointerEvents = 'none';
+    });
+
+    // Disable file uploads
+    document.querySelectorAll('.file-upload-box').forEach(box => {
+      box.style.pointerEvents = 'none';
+    });
+  }
+
+  showClosedModal() {
+    const modal = document.getElementById('registration-closed-modal');
+    if (modal) {
+      setTimeout(() => {
+        modal.classList.add('active');
+      }, 500);
+    }
+  }
+}
+
 // Global Variables
-let deptManager, selectHandler, prodiHandler, fileHandler, formHandler, videoManager;
+let deptManager, selectHandler, prodiHandler, fileHandler, formHandler, videoManager, registrationStatus;
 
 // Initialize Everything
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize particles background
   initParticles();
+
+  // Check registration status first
+  registrationStatus = new RegistrationStatusManager();
 
   // Initialize all components
   deptManager = new DepartmentManager();
